@@ -13,6 +13,8 @@ Pod::Spec.new do |s|
   s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}'
   s.ios.deployment_target = '14.0'
   s.dependency 'Capacitor'
-  s.dependency 'IONFilesystemLib', spec='~> 1.0'
+  # s.dependency 'IONFilesystemLib', spec='~> 1.0'
+  # this is temporary
+  s.vendored_frameworks = 'ios/Sources/*/IONFilesystemLib.xcframework'
   s.swift_version = '5.1'
 end
