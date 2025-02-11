@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorGeolocationPluginCapacitor',
+      name: 'capacitorFilesystemPluginCapacitor',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },

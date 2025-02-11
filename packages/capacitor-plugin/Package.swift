@@ -15,7 +15,7 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "IONFilesystemLib",
-            url: "https://github.com/ionic-team/ion-ios-geolocation/releases/download/1.0.0/IONFilesystemLib.zip",
+            url: "https://github.com/ionic-team/ion-ios-filesystem/releases/download/1.0.0/IONFilesystemLib.zip",
             checksum: "b117d3681a947f5d367e79abdb3bfc9abf7ab070ea5279d7da634ddd2d54ffdb" // sha-256
         ),
         .target(
