@@ -153,7 +153,7 @@ export class FilesystemWeb implements FilesystemPlugin {
   /**
    * Not available in web
    */
-  readFileInChunks(options: ReadFileInChunksOptions): Promise<ReadFileResult> {
+  readFileInChunks(_options: ReadFileInChunksOptions): Promise<ReadFileResult> {
     throw new Error('Method not implemented.');
   }
 

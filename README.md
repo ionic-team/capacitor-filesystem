@@ -136,21 +136,4 @@ const readFilePath = async () => {
 
 ## API
 
-<docgen-index>
-
-</docgen-index>
-
-<docgen-api>
-<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-</docgen-api>
-
-### Errors
-
-The plugin returns specific errors with specific codes on native Android and iOS. Web does not follow this standard for errors.
-
-The following table list all the plugin errors:
-
-| Error code        | Platform(s)  | Message                   |
-| ----------------- | ------------ | ------------------------- |
-| OS-PLUG-FILE-0001 | Android, iOS | Example of error message. |
+Check the plugin's api [here]("packages/capacitor-plugin/README.md)

@@ -1,0 +1,29 @@
+{
+  "name": "capacitor-filesystem-example-app",
+  "version": "1.0.0",
+  "description": "An Example App for testing the Capacitor Filesystem plugin",
+  "main": "index.js",
+  "keywords": [
+    "capacitor",
+    "mobile"
+  ],
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/android": "next",
+    "@capacitor/camera": "next",
+    "@capacitor/core": "next",
+    "@capacitor/ios": "next",
+    "@capacitor/splash-screen": "next",
+    "@capacitor/filesystem": "file:../capacitor-plugin"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "next",
+    "vite": "^5.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
