@@ -364,8 +364,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           name: e.substring(path.length + 1),
           type: subEntry.type,
           size: subEntry.size,
-          creationTime: subEntry.ctime,
-          modificationTime: subEntry.mtime,
+          ctime: subEntry.ctime,
+          mtime: subEntry.mtime,
           uri: subEntry.path,
         };
       }),
@@ -408,8 +408,8 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       name: entry.path.substring(path.length + 1),
       type: entry.type,
       size: entry.size,
-      creationTime: entry.ctime,
-      modificationTime: entry.mtime,
+      ctime: entry.ctime,
+      mtime: entry.mtime,
       uri: entry.path,
     };
   }
@@ -520,7 +520,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       await this.dbRequest('put', [entry]);
     };
 
-    const ctime = fromObj.creationTime ? fromObj.creationTime : Date.now();
+    const ctime = fromObj.ctime ? fromObj.ctime : Date.now();
 
     switch (fromObj.type) {
       // The "from" object is a file
@@ -554,7 +554,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
         // Copy the mtime/ctime of a renamed file
         if (doRename) {
-          await updateTime(to, ctime, fromObj.modificationTime);
+          await updateTime(to, ctime, fromObj.mtime);
         }
 
         // Resolve promise
@@ -575,7 +575,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
 
           // Copy the mtime/ctime of a renamed directory
           if (doRename) {
-            await updateTime(to, ctime, fromObj.modificationTime);
+            await updateTime(to, ctime, fromObj.mtime);
           }
         } catch (e) {
           // ignore
