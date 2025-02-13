@@ -119,6 +119,8 @@ const readFilePath = async () => {
 
 <docgen-index>
 
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
 * [`readFile(...)`](#readfile)
 * [`readFileInChunks(...)`](#readfileinchunks)
 * [`writeFile(...)`](#writefile)
@@ -139,6 +141,40 @@ const readFilePath = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Check read/write permissions.
+Required on Android, only when using <a href="#directory">`Directory.Documents`</a> or
+`Directory.ExternalStorage`.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### requestPermissions()
+
+```typescript
+requestPermissions() => Promise<PermissionStatus>
+```
+
+Request read/write permissions.
+Required on Android, only when using <a href="#directory">`Directory.Documents`</a> or
+`Directory.ExternalStorage`.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 1.0.0
+
+--------------------
+
 
 ### readFile(...)
 
@@ -174,7 +210,7 @@ Native only (not available in web)
 
 **Returns:** <code>Promise&lt;<a href="#readfileresult">ReadFileResult</a>&gt;</code>
 
-**Since:** 1.0.0
+**Since:** 7.1.0
 
 --------------------
 
@@ -362,6 +398,13 @@ Copy a file or directory
 ### Interfaces
 
 
+#### PermissionStatus
+
+| Prop                | Type                                                        |
+| ------------------- | ----------------------------------------------------------- |
+| **`publicStorage`** | <code><a href="#permissionstate">PermissionState</a></code> |
+
+
 #### ReadFileResult
 
 | Prop       | Type                        | Description                                                                                                                            | Since |
@@ -382,7 +425,7 @@ Copy a file or directory
 
 | Prop            | Type                | Description                  | Since |
 | --------------- | ------------------- | ---------------------------- | ----- |
-| **`chunkSize`** | <code>number</code> | Size of the chunks in bytes. | 1.0.0 |
+| **`chunkSize`** | <code>number</code> | Size of the chunks in bytes. | 7.1.0 |
 
 
 #### WriteFileResult
@@ -450,12 +493,12 @@ Copy a file or directory
 
 | Prop                   | Type                               | Description                                                                          | Since |
 | ---------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ | ----- |
-| **`name`**             | <code>string</code>                | Name of the file or directory.                                                       |       |
-| **`type`**             | <code>'file' \| 'directory'</code> | Type of the file.                                                                    | 1.0.0 |
-| **`size`**             | <code>number</code>                | Size of the file in bytes.                                                           | 1.0.0 |
-| **`creationTime`**     | <code>number</code>                | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 1.0.0 |
-| **`modificationTime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 1.0.0 |
-| **`uri`**              | <code>string</code>                | The uri of the file.                                                                 | 1.0.0 |
+| **`name`**             | <code>string</code>                | Name of the file or directory.                                                       | 7.1.0 |
+| **`type`**             | <code>'file' \| 'directory'</code> | Type of the file.                                                                    | 4.0.0 |
+| **`size`**             | <code>number</code>                | Size of the file in bytes.                                                           | 4.0.0 |
+| **`creationTime`**     | <code>number</code>                | Time of creation in milliseconds. It's not available on Android 7 and older devices. | 7.1.0 |
+| **`modificationTime`** | <code>number</code>                | Time of last modification in milliseconds.                                           | 7.1.0 |
+| **`uri`**              | <code>string</code>                | The uri of the file.                                                                 | 4.0.0 |
 
 
 #### ReaddirOptions
@@ -503,10 +546,15 @@ Copy a file or directory
 
 | Prop      | Type                | Description                            | Since |
 | --------- | ------------------- | -------------------------------------- | ----- |
-| **`uri`** | <code>string</code> | The uri where the file was copied into | 1.0.0 |
+| **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
 
 
 ### Type Aliases
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
 #### StatResult
@@ -528,13 +576,13 @@ Copy a file or directory
 | --------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`Documents`**       | <code>'DOCUMENTS'</code>        | The Documents directory. On iOS it's the app's documents directory. Use this directory to store user-generated content. On Android it's the Public Documents folder, so it's accessible from other apps. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. On Android 11 or newer the app can only access the files/folders the app created. | 1.0.0 |
 | **`Data`**            | <code>'DATA'</code>             | The Data directory. On iOS it will use the Documents directory. On Android it's the directory holding application files. Files will be deleted when the application is uninstalled.                                                                                                                                                                                                                                                                                                       | 1.0.0 |
-| **`Library`**         | <code>'LIBRARY'</code>          | The Library directory. On iOS it will use the Library directory. On Android it's the directory holding application files. Files will be deleted when the application is uninstalled.                                                                                                                                                                                                                                                                                                      | 1.0.0 |
+| **`Library`**         | <code>'LIBRARY'</code>          | The Library directory. On iOS it will use the Library directory. On Android it's the directory holding application files. Files will be deleted when the application is uninstalled.                                                                                                                                                                                                                                                                                                      | 1.1.0 |
 | **`Cache`**           | <code>'CACHE'</code>            | The Cache directory. Can be deleted in cases of low memory, so use this directory to write app-specific files. that your app can re-create easily.                                                                                                                                                                                                                                                                                                                                        | 1.0.0 |
 | **`External`**        | <code>'EXTERNAL'</code>         | The external directory. On iOS it will use the Documents directory. On Android it's the directory on the primary shared/external storage device where the application can place persistent files it owns. These files are internal to the applications, and not typically visible to the user as media. Files will be deleted when the application is uninstalled.                                                                                                                        | 1.0.0 |
 | **`ExternalStorage`** | <code>'EXTERNAL_STORAGE'</code> | The external storage directory. On iOS it will use the Documents directory. On Android it's the primary shared/external storage directory. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. It's not accesible on Android 11 or newer.                                                                                                      | 1.0.0 |
-| **`ExternalCache`**   | <code>'EXTERNAL_CACHE'</code>   | The external cache directory. Android ONly On Android it's the primary shared/external cache. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. It's not accesible on Android 11 or newer.                                                                                                                                                   | 1.0.0 |
-| **`LibraryNoCloud`**  | <code>'LIBRARY_NO_CLOUD'</code> | iOS only                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | 1.0.0 |
-| **`Temporary`**       | <code>'TEMPORARY'</code>        | iOS only                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | 1.0.0 |
+| **`ExternalCache`**   | <code>'EXTERNAL_CACHE'</code>   | The external cache directory. Android ONly On Android it's the primary shared/external cache. It's not accesible on Android 10 unless the app enables legacy External Storage by adding `android:requestLegacyExternalStorage="true"` in the `application` tag in the `AndroidManifest.xml`. It's not accesible on Android 11 or newer.                                                                                                                                                   | 7.1.0 |
+| **`LibraryNoCloud`**  | <code>'LIBRARY_NO_CLOUD'</code> | iOS only It maps to Library/NoCloud directory Files will be deleted when the application is uninstalled.                                                                                                                                                                                                                                                                                                                                                                                  | 7.1.0 |
+| **`Temporary`**       | <code>'TEMPORARY'</code>        | iOS only The tmp/ directory. Files will be deleted when the application is uninstalled.                                                                                                                                                                                                                                                                                                                                                                                                   | 7.1.0 |
 
 
 #### Encoding

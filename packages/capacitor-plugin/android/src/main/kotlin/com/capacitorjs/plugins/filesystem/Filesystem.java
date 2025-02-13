@@ -317,18 +317,16 @@ public class Filesystem {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
-        executor.execute(
-            () -> {
-                try {
-                    JSObject result = doDownloadInBackground(urlString, call, bridge, emitter);
-                    handler.post(() -> callback.onSuccess(result));
-                } catch (Exception error) {
-                    handler.post(() -> callback.onError(error));
-                } finally {
-                    executor.shutdown();
-                }
+        executor.execute(() -> {
+            try {
+                JSObject result = doDownloadInBackground(urlString, call, bridge, emitter);
+                handler.post(() -> callback.onSuccess(result));
+            } catch (Exception error) {
+                handler.post(() -> callback.onError(error));
+            } finally {
+                executor.shutdown();
             }
-        );
+        });
     }
 
     private JSObject doDownloadInBackground(String urlString, PluginCall call, Bridge bridge, HttpRequestHandler.ProgressEmitter emitter)

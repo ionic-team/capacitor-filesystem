@@ -1,3 +1,8 @@
+import type { PermissionState } from '@capacitor/core';
+
+export interface PermissionStatus {
+  publicStorage: PermissionState;
+}
 
 export enum Directory {
   /**
@@ -30,7 +35,7 @@ export enum Directory {
    * On Android it's the directory holding application files.
    * Files will be deleted when the application is uninstalled.
    *
-   * @since 1.0.0
+   * @since 1.1.0
    */
   Library = 'LIBRARY',
 
@@ -78,22 +83,26 @@ export enum Directory {
    * in the `AndroidManifest.xml`.
    * It's not accesible on Android 11 or newer.
    *
-   * @since 1.0.0
+   * @since 7.1.0
    */
   ExternalCache = 'EXTERNAL_CACHE',
 
   /**
    * iOS only
+   * It maps to Library/NoCloud directory
+   * Files will be deleted when the application is uninstalled.
    *
-   * @since 1.0.0
+   * @since 7.1.0
    */
   LibraryNoCloud = 'LIBRARY_NO_CLOUD',
 
   /**
-  * iOS only
-  *
-  * @since 1.0.0
-  */
+   * iOS only
+   * The tmp/ directory.
+   * Files will be deleted when the application is uninstalled.
+   *
+   * @since 7.1.0
+   */
   Temporary = 'TEMPORARY',
 }
 
@@ -230,7 +239,7 @@ export interface ReadFileInChunksOptions extends ReadFileOptions {
   /**
    * Size of the chunks in bytes.
    *
-   * @since 1.0.0
+   * @since 7.1.0
    */
   chunkSize: number;
 }
@@ -412,19 +421,22 @@ export interface ReaddirResult {
 export interface FileInfo {
   /**
    * Name of the file or directory.
+   *
+   * @since 7.1.0
    */
   name: string;
+
   /**
    * Type of the file.
    *
-   * @since 1.0.0
+   * @since 4.0.0
    */
   type: 'directory' | 'file';
 
   /**
    * Size of the file in bytes.
    *
-   * @since 1.0.0
+   * @since 4.0.0
    */
   size: number;
 
@@ -433,21 +445,21 @@ export interface FileInfo {
    *
    * It's not available on Android 7 and older devices.
    *
-   * @since 1.0.0
+   * @since 7.1.0
    */
   creationTime?: number;
 
   /**
    * Time of last modification in milliseconds.
    *
-   * @since 1.0.0
+   * @since 7.1.0
    */
   modificationTime: number;
 
   /**
    * The uri of the file.
    *
-   * @since 1.0.0
+   * @since 4.0.0
    */
   uri: string;
 }
@@ -466,12 +478,30 @@ export interface CopyResult {
   /**
    * The uri where the file was copied into
    *
-   * @since 1.0.0
+   * @since 4.0.0
    */
   uri: string;
 }
 
 export interface FilesystemPlugin {
+  /**
+   * Check read/write permissions.
+   * Required on Android, only when using `Directory.Documents` or
+   * `Directory.ExternalStorage`.
+   *
+   * @since 1.0.0
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+
+  /**
+   * Request read/write permissions.
+   * Required on Android, only when using `Directory.Documents` or
+   * `Directory.ExternalStorage`.
+   *
+   * @since 1.0.0
+   */
+  requestPermissions(): Promise<PermissionStatus>;
+
   /**
    * Read a file from disk
    *
@@ -482,8 +512,8 @@ export interface FilesystemPlugin {
   /**
    * Read a file from disk, in chunks
    * Native only (not available in web)
-   * 
-   * @since 1.0.0
+   *
+   * @since 7.1.0
    */
   readFileInChunks(options: ReadFileInChunksOptions): Promise<ReadFileResult>;
 
@@ -556,10 +586,9 @@ export interface FilesystemPlugin {
    * @since 1.0.0
    */
   copy(options: CopyOptions): Promise<CopyResult>;
-
 }
 
 export type PluginError = {
-  code: string,
-  message: string
-}
+  code: string;
+  message: string;
+};
