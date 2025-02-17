@@ -1,0 +1,11 @@
+{
+  "appId": "com.capacitorjs.exampleucapp.plugins.filesystem",
+  "appName": "CAP-FILE Sample",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}

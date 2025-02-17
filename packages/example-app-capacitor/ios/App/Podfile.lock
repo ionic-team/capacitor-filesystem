@@ -1,0 +1,40 @@
+PODS:
+  - Capacitor (7.0.0-rc.0):
+    - CapacitorCordova
+  - CapacitorCamera (7.0.0-rc.0):
+    - Capacitor
+  - CapacitorCordova (7.0.0-rc.0)
+  - CapacitorFilesystem (7.1.0):
+    - Capacitor
+  - CapacitorSplashScreen (7.0.0-rc.0):
+    - Capacitor
+
+DEPENDENCIES:
+  - "Capacitor (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/ios`)"
+  - "CapacitorCamera (from `../../../../node_modules/.pnpm/@capacitor+camera@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/camera`)"
+  - "CapacitorCordova (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/ios`)"
+  - "CapacitorFilesystem (from `../../../../node_modules/.pnpm/@capacitor+filesystem@file+packages+capacitor-plugin_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/filesystem`)"
+  - "CapacitorSplashScreen (from `../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/splash-screen`)"
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../../../node_modules/.pnpm/@capacitor+ios@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/ios"
+  CapacitorCamera:
+    :path: "../../../../node_modules/.pnpm/@capacitor+camera@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/camera"
+  CapacitorCordova:
+    :path: "../../../../node_modules/.pnpm/@capacitor+ios@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/ios"
+  CapacitorFilesystem:
+    :path: "../../../../node_modules/.pnpm/@capacitor+filesystem@file+packages+capacitor-plugin_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/filesystem"
+  CapacitorSplashScreen:
+    :path: "../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0-rc.0_@capacitor+core@7.0.0-rc.0/node_modules/@capacitor/splash-screen"
+
+SPEC CHECKSUMS:
+  Capacitor: 307e6badc74d8e77a75ab60e6d3216df7a8f1277
+  CapacitorCamera: 5fec16b432e3d9250cd771f03aafb2148c08033e
+  CapacitorCordova: 8f4f6826f0b40f7b506eb13b832039b7140a88b4
+  CapacitorFilesystem: 568b8b499f98da2e1dafdf3fb7f7510f15658131
+  CapacitorSplashScreen: 8c44d85456d72e103c95895dea790eef87e7018f
+
+PODFILE CHECKSUM: c2d0ce2cd5899c3ace4f0e05876d5dffd2af05e8
+
+COCOAPODS: 1.16.2
