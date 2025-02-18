@@ -3,7 +3,7 @@ import IONFilesystemLib
 
 enum FilesystemOperation {
     // Read Operations
-    case read(url: URL, encoding: IONFILEEncoding)
+    case readFile(url: URL, encoding: IONFILEEncoding)
     case readdir(url: URL)
     case stat(url: URL)
     case getUri(url: URL)

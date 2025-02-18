@@ -18,8 +18,11 @@ extension CAPPluginCall {
         getSearchPath(key, withDefaultSearchPath: defaultValue)
     }
 
-    func getEncodingMapper(usingValue data: String) -> IONFILEEncodingValueMapper? {
-        switch getEncoding(Constants.MethodParameter.encoding) {
+    func getEncodingMapper() -> IONFILEEncodingValueMapper? {
+        guard let data: String = getString(Constants.MethodParameter.data) else {
+            return nil
+        }
+        return switch getEncoding(Constants.MethodParameter.encoding) {
         case .byteBuffer:
             if let base64Data = Data.capacitor.data(base64EncodedOrDataUrl: data) {
                 .byteBuffer(value: base64Data)
@@ -30,6 +33,10 @@ extension CAPPluginCall {
             .string(encoding: stringEncoding, value: data)
         @unknown default: nil
         }
+    }
+    
+    func getIONFileMethod() -> IONFileMethod {
+        return IONFileMethod(rawValue: self.methodName) ?? IONFileMethod.getUri
     }
 
     func handleSuccess(_ data: PluginCallResultData?) {

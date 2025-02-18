@@ -57,7 +57,7 @@ private extension FilesystemPlugin {
     @objc func readFile(_ call: CAPPluginCall) {
         let encoding = call.getEncoding(Constants.MethodParameter.encoding)
         performSinglePathOperation(call) {
-            .read(url: $0, encoding: encoding)
+            .readFile(url: $0, encoding: encoding)
         }
     }
 
@@ -65,11 +65,8 @@ private extension FilesystemPlugin {
      * Write a file to the filesystem.
      */
     @objc func writeFile(_ call: CAPPluginCall) {
-        guard let data = call.getString(Constants.MethodParameter.data) else {
-            return call.handleError(.invalidDataParameter)
-        }
-        guard let encodingMapper = call.getEncodingMapper(usingValue: data) else {
-            return call.handleError(.invalidDataEncodingCombination(method: .writeFile))
+        guard let encodingMapper = call.getEncodingMapper() else {
+            return call.handleError(.invalidInput(method: call.getIONFileMethod()))
         }
         let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
@@ -82,11 +79,8 @@ private extension FilesystemPlugin {
      * Append to a file.
      */
     @objc func appendFile(_ call: CAPPluginCall) {
-        guard let data = call.getString(Constants.MethodParameter.data) else {
-            return call.handleError(.invalidDataParameter)
-        }
-        guard let encodingMapper = call.getEncodingMapper(usingValue: data) else {
-            return call.handleError(.invalidDataEncodingCombination(method: .appendFile))
+        guard let encodingMapper = call.getEncodingMapper() else {
+            return call.handleError(.invalidInput(method: call.getIONFileMethod()))
         }
         let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
