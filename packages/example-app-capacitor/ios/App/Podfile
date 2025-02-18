@@ -17,7 +17,6 @@ def capacitor_pods
 end
 
 target 'App' do
-  #pod 'IONFilesystemLib', :path => '../../../ios-lib'
   capacitor_pods
   # Add your Pods here
 end
