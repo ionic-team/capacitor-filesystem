@@ -7,6 +7,8 @@ struct Constants {
         static let externalCache = "EXTERNAL_CACHE"
         static let externalStorage = "EXTERNAL_STORAGE"
         static let library = "LIBRARY"
+        static let libraryNoCloud = "LIBRARY_NO_CLOUD"
+        static let temporary = "TEMPORARY"
     }
 
     struct FileItemTypeValue {

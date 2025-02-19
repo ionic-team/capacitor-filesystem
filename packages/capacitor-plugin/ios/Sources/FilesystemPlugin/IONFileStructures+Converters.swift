@@ -17,6 +17,8 @@ extension IONFILEDirectoryType {
         case Constants.DirectoryTypeValue.cache: .cache
         case Constants.DirectoryTypeValue.data, Constants.DirectoryTypeValue.documents, Constants.DirectoryTypeValue.external, Constants.DirectoryTypeValue.externalCache, Constants.DirectoryTypeValue.externalStorage: .document
         case Constants.DirectoryTypeValue.library: .library
+        case Constants.DirectoryTypeValue.libraryNoCloud: .notSyncedLibrary
+        case Constants.DirectoryTypeValue.temporary: .temporary
         default: nil
         }
     }
