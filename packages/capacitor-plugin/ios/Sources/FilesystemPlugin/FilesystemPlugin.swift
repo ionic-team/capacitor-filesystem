@@ -14,6 +14,7 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "Filesystem"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "readFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "readFileInChunks", returnType: CAPPluginReturnCallback),
         CAPPluginMethod(name: "writeFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "appendFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteFile", returnType: CAPPluginReturnPromise),
@@ -58,6 +59,16 @@ private extension FilesystemPlugin {
         let encoding = call.getEncoding(Constants.MethodParameter.encoding)
         performSinglePathOperation(call) {
             .readFile(url: $0, encoding: encoding)
+        }
+    }
+    
+    @objc func readFileInChunks(_ call: CAPPluginCall) {
+        let encoding = call.getEncoding(Constants.MethodParameter.encoding)
+        guard let chunkSize = call.getInt(Constants.MethodParameter.chunkSize) else {
+            return call.handleError(.invalidInput(method: call.getIONFileMethod()))
+        }
+        performSinglePathOperation(call) {
+            .readFileInChunks(url: $0, encoding: encoding, chunkSize: chunkSize)
         }
     }
 

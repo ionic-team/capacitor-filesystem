@@ -24,8 +24,8 @@ extension IONFILEDirectoryType {
     }
 }
 
-extension IONFILEEncodingValueMapper: @retroactive CustomStringConvertible {
-    public var description: String {
+extension IONFILEEncodingValueMapper {
+    var textValue: String {
         switch self {
         case .byteBuffer(let data): data.base64EncodedString()
         case .string(_, let text): text

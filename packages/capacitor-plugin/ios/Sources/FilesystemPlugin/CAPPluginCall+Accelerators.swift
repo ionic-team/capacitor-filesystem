@@ -39,7 +39,8 @@ extension CAPPluginCall {
         return IONFileMethod(rawValue: self.methodName) ?? IONFileMethod.getUri
     }
 
-    func handleSuccess(_ data: PluginCallResultData?) {
+    func handleSuccess(_ data: PluginCallResultData?, _ keepCallAlive: Bool = false) {
+        keepAlive = keepCallAlive
         if let data {
             resolve(data)
         } else {

@@ -1,9 +1,15 @@
 import Capacitor
 import Foundation
 import IONFilesystemLib
+import Combine
 
-struct FilesystemOperationExecutor {
+class FilesystemOperationExecutor {
     let service: FileService
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(service: FileService) {
+        self.service = service
+    }
 
     func execute(_ operation: FilesystemOperation, _ call: CAPPluginCall) {
         do {
@@ -11,8 +17,11 @@ struct FilesystemOperationExecutor {
 
             switch operation {
             case .readFile(let url, let encoding):
-                let data = try service.readEntireFile(atURL: url, withEncoding: encoding).description
+                let data = try service.readEntireFile(atURL: url, withEncoding: encoding).textValue
                 resultData = [Constants.ResultDataKey.data: data]
+            case .readFileInChunks(let url, let encoding, let chunkSize):
+                try processFileInChunks(at: url, withEncoding: encoding, chunkSize: chunkSize, for: operation, call)
+                return
             case .write(let url, let encodingMapper, let recursive):
                 try service.saveFile(atURL: url, withEncodingAndData: encodingMapper, includeIntermediateDirectories: recursive)
                 resultData = [Constants.ResultDataKey.uri: url.absoluteString]
@@ -47,11 +56,34 @@ struct FilesystemOperationExecutor {
 }
 
 private extension FilesystemOperationExecutor {
+    func processFileInChunks(at url: URL, withEncoding encoding: IONFILEEncoding, chunkSize: Int, for operation: FilesystemOperation, _ call: CAPPluginCall) throws {
+        let chunkSizeToUse = chunkSizeToUse(basedOn: chunkSize, and: encoding)
+        try service.readFileInChunks(atURL: url, withEncoding: encoding, andChunkSize: chunkSizeToUse)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    call.handleSuccess([Constants.ResultDataKey.data: Constants.ConfigurationValue.endOfFile])
+                case .failure(let error):
+                    call.handleError(self.mapError(error, for: operation))
+                }
+            }, receiveValue: {
+                call.handleSuccess([Constants.ResultDataKey.data: $0.textValue], true)
+            })
+            .store(in: &cancellables)
+    }
+
+    private func chunkSizeToUse(basedOn chunkSize: Int, and encoding: IONFILEEncoding) -> Int {
+        // When dealing with byte buffers, we need chunk size that are multiples of 3
+        // We're treating byte buffers as base64 data, and size multiple of 3 makes it so that chunks can be concatenated
+        encoding == .byteBuffer ? chunkSize - chunkSize % 3 + 3 : chunkSize
+    }
+    
     func mapError(_ error: Error, for operation: FilesystemOperation) -> FilesystemError {
         var path = ""
         var method: IONFileMethod = IONFileMethod.getUri
         switch operation {
         case .readFile(let url, _): path = url.absoluteString; method = .readFile
+        case .readFileInChunks(let url, _, _): path = url.absoluteString; method = .readFileInChunks
         case .write(let url, _, _): path = url.absoluteString; method = .writeFile
         case .append(let url, _, _): path = url.absoluteString; method = .appendFile
         case .delete(let url): path = url.absoluteString; method = .deleteFile

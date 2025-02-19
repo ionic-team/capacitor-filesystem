@@ -1,5 +1,6 @@
 enum IONFileMethod: String {
     case readFile
+    case readFileInChunks
     case writeFile
     case appendFile
     case deleteFile
