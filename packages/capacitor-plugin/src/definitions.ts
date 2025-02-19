@@ -588,7 +588,62 @@ export interface FilesystemPlugin {
   copy(options: CopyOptions): Promise<CopyResult>;
 }
 
+/**
+ * Structure for errors returned by the plugin.
+ * 
+ * `code` follows "OS-PLUG-FILE-XXXX" format
+ * 
+ * @since 1.0.0
+ */
 export type PluginError = {
   code: string;
   message: string;
 };
+
+/**
+ * @deprecated Use `ReadFileOptions`.
+ * @since 1.0.0
+ */
+export type FileReadOptions = ReadFileOptions;
+
+/**
+ * @deprecated Use `ReadFileResult`.
+ * @since 1.0.0
+ */
+export type FileReadResult = ReadFileResult;
+
+/**
+ * @deprecated Use `WriteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileWriteOptions = WriteFileOptions;
+
+/**
+ * @deprecated Use `WriteFileResult`.
+ * @since 1.0.0
+ */
+export type FileWriteResult = WriteFileResult;
+
+/**
+ * @deprecated Use `AppendFileOptions`.
+ * @since 1.0.0
+ */
+export type FileAppendOptions = AppendFileOptions;
+
+/**
+ * @deprecated Use `DeleteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileDeleteOptions = DeleteFileOptions;
+
+/**
+ * @deprecated Use `Directory`.
+ * @since 1.0.0
+ */
+export const FilesystemDirectory = Directory;
+
+/**
+ * @deprecated Use `Encoding`.
+ * @since 1.0.0
+ */
+export const FilesystemEncoding = Encoding;
