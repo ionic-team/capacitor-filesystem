@@ -40,11 +40,11 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         return fileService.map(Result.success) ?? .failure(.bridgeNotInitialised)
     }
 
-    override public func checkPermissions(_ call: CAPPluginCall) {
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
         call.handlePermissionSuccess()
     }
 
-    override public func requestPermissions(_ call: CAPPluginCall) {
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
         call.handlePermissionSuccess()
     }
 }
