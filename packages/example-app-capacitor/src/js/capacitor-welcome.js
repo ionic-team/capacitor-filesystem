@@ -74,6 +74,7 @@ window.customElements.define(
         <button id="fileWrite" class="button">fileWrite</button>
         <br><br>
         <button id="fileRead" class="button">fileRead</button>
+        <button id="fileReadInSmallChunks" class="button">fileReadInSmallChunks</button>
         <br><br>
         <button id="fileAppend" class="button">fileAppend</button>
         <br><br>
@@ -117,11 +118,14 @@ window.customElements.define(
       const self = this;
 
       self.shadowRoot.querySelector('#check-permission').addEventListener('click', async function (e) { 
-        this.checkPermissions()
+        let permissionStatus = await Filesystem.checkPermissions();
+        console.log(permissionStatus)
       });
       self.shadowRoot.querySelector('#request-permission').addEventListener('click', async function (e) {
-        this.requestPermissions()
+        let permissionStatus = await Filesystem.requestPermissions();
+        console.log(permissionStatus);
       });
+
       self.shadowRoot.querySelector('#mkdir').addEventListener('click', async function (e) {
         try {
           let ret = await Filesystem.mkdir({
@@ -145,7 +149,6 @@ window.customElements.define(
           alert('Unable to remove directory', e);
         }
       });
-
       self.shadowRoot.querySelector('#readdir').addEventListener('click', async function (e) {
         try {
           let ret = await Filesystem.readdir({
@@ -177,6 +180,23 @@ window.customElements.define(
           encoding: Encoding.UTF8,
         });
         console.log('file contents', contents.data);
+      });
+      self.shadowRoot.querySelector('#fileReadInSmallChunks').addEventListener('click', async function (e) {
+        await Filesystem.readFileInChunks(
+          {
+            path: 'secrets/text.txt',
+            directory: Directory.Documents,
+            encoding: Encoding.UTF8,
+            chunkSize: 3, // on Android the chunk size to be used will be much larger
+          },
+          (chunkResult, err) => {
+            if (err) {
+              console.log(err)
+              return
+            }
+            console.log('chunk read', JSON.stringify(chunkResult))
+          }
+      );
       });
       self.shadowRoot.querySelector('#fileAppend').addEventListener('click', async function (e) {
         await Filesystem.appendFile({
@@ -216,6 +236,7 @@ window.customElements.define(
           console.error('Unable to stat file', e);
         }
       });
+
       self.shadowRoot.querySelector('#directoryTest').addEventListener('click', async function (e) {
         try {
           const result = await Filesystem.writeFile({
@@ -266,6 +287,7 @@ window.customElements.define(
         await rmdirAll('da');
         console.log('copy finished');
       });
+
       self.shadowRoot.querySelector('#mkdirUrl').addEventListener('click', async function (e) {
         try {
           let uriResult = await Filesystem.getUri({
@@ -406,6 +428,53 @@ window.customElements.define(
         await rmdirAll('da');
         console.log('copy finished');
       });
+    }
+
+    // Helper function to run the provided promise-returning function on a single item or array of items
+    async doAll(item, callback) {
+      item = Array.isArray(item) ? item : [item];
+      for (let i of item) {
+        await callback(i);
+      }
+    }
+    // Create many files
+    writeAll(paths) {
+      return this.doAll(paths, (path) =>
+        Filesystem.writeFile({
+          directory: Directory.Data,
+          path: path,
+          data: path,
+          encoding: Encoding.UTF8,
+        })
+      );
+    }
+    // Delete many files
+    deleteAll(paths) {
+      return this.doAll(paths, (path) =>
+        Filesystem.deleteFile({
+          directory: Directory.Data,
+          path: path,
+        })
+      );
+    }
+    // Create many directories
+    mkdirAll(paths) {
+      return this.doAll(paths, (path) =>
+        Filesystem.mkdir({
+          directory: Directory.Data,
+          path: path,
+          recursive: true,
+        })
+      );
+    }
+    // Remove many directories
+    rmdirAll(paths) {
+      return this.doAll(paths, (path) =>
+        Filesystem.rmdir({
+          directory: Directory.Data,
+          path: path,
+        })
+      );
     }
   }
 );
