@@ -487,7 +487,7 @@ export interface CopyResult {
 
 /**
  * Callback for receiving chunks read from a file, or error if something went wrong.
- * 
+ *
  * @since 7.1.0
  */
 export type ReadFileInChunksCallback = (chunkRead: ReadFileResult | null, err?: any) => void;
@@ -601,9 +601,9 @@ export interface FilesystemPlugin {
 
 /**
  * Structure for errors returned by the plugin.
- * 
+ *
  * `code` follows "OS-PLUG-FILE-XXXX" format
- * 
+ *
  * @since 1.0.0
  */
 export type PluginError = {

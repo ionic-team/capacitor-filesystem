@@ -29,10 +29,10 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
     ]
-    
+
     private var fileService: FileService?
 
-    public override func load() {
+    override public func load() {
         self.fileService = IONFILEManager()
     }
 
@@ -61,7 +61,7 @@ private extension FilesystemPlugin {
             .readFile(url: $0, encoding: encoding)
         }
     }
-    
+
     @objc func readFileInChunks(_ call: CAPPluginCall) {
         let encoding = call.getEncoding(Constants.MethodParameter.encoding)
         guard let chunkSize = call.getInt(Constants.MethodParameter.chunkSize) else {
@@ -116,7 +116,7 @@ private extension FilesystemPlugin {
         let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
         performSinglePathOperation(call) {
-            .mkdir(url: $0,recursive: recursive)
+            .mkdir(url: $0, recursive: recursive)
         }
     }
 

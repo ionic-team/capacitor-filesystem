@@ -34,7 +34,7 @@ extension CAPPluginCall {
         @unknown default: nil
         }
     }
-    
+
     func getIONFileMethod() -> IONFileMethod {
         return IONFileMethod(rawValue: self.methodName) ?? IONFileMethod.getUri
     }

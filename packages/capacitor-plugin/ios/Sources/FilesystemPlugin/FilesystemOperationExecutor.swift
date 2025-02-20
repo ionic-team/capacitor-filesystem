@@ -6,7 +6,7 @@ import Combine
 class FilesystemOperationExecutor {
     let service: FileService
     private var cancellables = Set<AnyCancellable>()
-    
+
     init(service: FileService) {
         self.service = service
     }
@@ -77,7 +77,7 @@ private extension FilesystemOperationExecutor {
         // We're treating byte buffers as base64 data, and size multiple of 3 makes it so that chunks can be concatenated
         encoding == .byteBuffer ? chunkSize - chunkSize % 3 + 3 : chunkSize
     }
-    
+
     func mapError(_ error: Error, for operation: FilesystemOperation) -> FilesystemError {
         var path = ""
         var method: IONFileMethod = IONFileMethod.getUri
@@ -95,10 +95,10 @@ private extension FilesystemOperationExecutor {
         case .rename(let sourceUrl, _): path = sourceUrl.absoluteString; method = .rename
         case .copy(let sourceUrl, _): path = sourceUrl.absoluteString; method = .copy
         }
-        
+
         return mapError(error, withPath: path, andMethod: method)
     }
-    
+
     private func mapError(_ error: Error, withPath path: String, andMethod method: IONFileMethod) -> FilesystemError {
         return switch error {
         case IONFILEDirectoryManagerError.notEmpty: .cannotDeleteChildren
