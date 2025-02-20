@@ -198,17 +198,20 @@ Read a file from disk
 ### readFileInChunks(...)
 
 ```typescript
-readFileInChunks(options: ReadFileInChunksOptions) => Promise<ReadFileResult>
+readFileInChunks(options: ReadFileInChunksOptions, callback: ReadFileInChunksCallback) => Promise<CallbackID>
 ```
 
-Read a file from disk, in chunks
-Native only (not available in web)
+Read a file from disk, in chunks.
+Native only (not available in web).
+Use the callback to receive each read chunk.
+If empty chunk is returned, it means file has been completely read.
 
-| Param         | Type                                                                        |
-| ------------- | --------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#readfileinchunksoptions">ReadFileInChunksOptions</a></code> |
+| Param          | Type                                                                          |
+| -------------- | ----------------------------------------------------------------------------- |
+| **`options`**  | <code><a href="#readfileinchunksoptions">ReadFileInChunksOptions</a></code>   |
+| **`callback`** | <code><a href="#readfileinchunkscallback">ReadFileInChunksCallback</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#readfileresult">ReadFileResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;string&gt;</code>
 
 **Since:** 7.1.0
 
@@ -555,6 +558,18 @@ Copy a file or directory
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### ReadFileInChunksCallback
+
+Callback for receiving chunks read from a file, or error if something went wrong.
+
+<code>(chunkRead: <a href="#readfileresult">ReadFileResult</a> | null, err?: any): void</code>
+
+
+#### CallbackID
+
+<code>string</code>
 
 
 #### StatResult
