@@ -139,6 +139,8 @@ const readFilePath = async () => {
 
 </docgen-index>
 
+For list of existing error codes, see [Errors](#errors).
+
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
@@ -612,10 +614,20 @@ Callback for receiving chunks read from a file, or error if something went wrong
 
 ### Errors
 
-The plugin returns specific errors with specific codes on native Android and iOS. Web does not follow this standard for errors.
+Since version 7.1.0, the plugin returns specific errors with specific codes on native Android and iOS. Web does not follow this standard for errors.
 
 The following table list all the plugin errors:
 
-| Error code        | Platform(s)  | Message                   |
-| ----------------- | ------------ | ------------------------- |
-| OS-PLUG-FILE-0001 | Android, iOS | Example of error message. |
+| Error code        | Platform(s)      | Message                      |
+|-------------------|------------------|------------------------------|
+| OS-PLUG-FILE-0004 | iOS              | Cordova / Capacitor bridge isn’t initialized. |
+| OS-PLUG-FILE-0005 | Android, iOS     | The method input parameters aren’t valid. |
+| OS-PLUG-FILE-0006 | Android, iOS     | Invalid path was provided. |
+| OS-PLUG-FILE-0007 | Android          | Unable to perform file operation, user denied permission request. |
+| OS-PLUG-FILE-0008 | Android, iOS     | Operation failed because file does not exist. |
+| OS-PLUG-FILE-0009 | Android          | Operation not supported for provided input. |
+| OS-PLUG-FILE-0010 | Android, iOS     | Directory already exists, cannot be overwritten. |
+| OS-PLUG-FILE-0011 | Android, iOS     | Missing parent directory – possibly recursive=false was passed or parent directory creation failed. |
+| OS-PLUG-FILE-0012 | Android, iOS     | Cannot delete directory with children; received recursive=false but directory has contents. |
+| OS-PLUG-FILE-0013 | Android, iOS     | The operation failed with an error. |
+
