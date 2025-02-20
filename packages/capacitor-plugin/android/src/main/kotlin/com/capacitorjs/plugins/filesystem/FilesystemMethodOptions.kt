@@ -3,7 +3,7 @@ package com.capacitorjs.plugins.filesystem
 import com.getcapacitor.PluginCall
 import io.ionic.libs.ionfilesystemlib.model.IONFILEEncoding
 import io.ionic.libs.ionfilesystemlib.model.IONFILEFolderType
-import io.ionic.libs.ionfilesystemlib.model.IONFILEReadByChunksOptions
+import io.ionic.libs.ionfilesystemlib.model.IONFILEReadInChunksOptions
 import io.ionic.libs.ionfilesystemlib.model.IONFILEReadOptions
 import io.ionic.libs.ionfilesystemlib.model.IONFILESaveMode
 import io.ionic.libs.ionfilesystemlib.model.IONFILESaveOptions
@@ -28,7 +28,7 @@ internal data class ReadFileOptions(
 
 internal data class ReadFileInChunksOptions(
     val uri: IONFILEUri.Unresolved,
-    val options: IONFILEReadByChunksOptions
+    val options: IONFILEReadInChunksOptions
 )
 
 internal data class WriteFileOptions(
@@ -67,7 +67,7 @@ internal fun PluginCall.getReadFileInChunksOptions(): ReadFileInChunksOptions? {
     val chunkSize = getInt(INPUT_CHUNK_SIZE) ?: return null
     return ReadFileInChunksOptions(
         uri = uri,
-        options = IONFILEReadByChunksOptions(
+        options = IONFILEReadInChunksOptions(
             IONFILEEncoding.fromEncodingName(encodingName),
             chunkSize
         )

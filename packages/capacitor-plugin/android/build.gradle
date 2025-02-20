@@ -59,6 +59,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //implementation("io.ionic.libs:ionfilesystem-android:1.0.0")
+    implementation project(':tmp-native-lib-android')
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
 

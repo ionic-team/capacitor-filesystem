@@ -78,7 +78,7 @@ class FilesystemPlugin : Plugin() {
             return
         }
         runWithPermission(input.uri, call) { uri ->
-            controller.readFileByChunks(uri, input.options)
+            controller.readFileInChunks(uri, input.options)
                 .onEach { chunk ->
                     call.sendSuccess(result = createReadResultObject(chunk), keepCallback = true)
                 }
