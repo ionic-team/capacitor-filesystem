@@ -12,69 +12,57 @@ object FilesystemErrors {
         val message: String
     )
 
-    // TODO align errors with iOS - to be done in a future PR possibly?
-
     fun invalidInputMethod(methodName: String): ErrorInfo = ErrorInfo(
-        code = formatErrorCode(1),
-        message = "Received invalid input on $methodName."
+        code = formatErrorCode(5),
+        message = "The '$methodName' input. parameters aren't valid."
     )
 
-    val invalidPath: ErrorInfo = ErrorInfo(
-        code = formatErrorCode(2),
-        message = "The provided path is not valid."
+    fun invalidPath(path: String): ErrorInfo = ErrorInfo(
+        code = formatErrorCode(6),
+        message = "Invalid ${if (path.isNotBlank()) "'$path' " else ""}path."
     )
 
     val filePermissionsDenied: ErrorInfo = ErrorInfo(
-        code = formatErrorCode(3),
+        code = formatErrorCode(7),
         message = "Unable to do file operation, user denied permission request."
     )
 
-    fun doesNotExist(methodName: String): ErrorInfo = ErrorInfo(
-        code = formatErrorCode(4),
-        message = "$methodName operation failed because the provided file does not exist."
+    fun doesNotExist(methodName: String, path: String): ErrorInfo = ErrorInfo(
+        code = formatErrorCode(8),
+        message = "'$methodName' failed because file ${if (path.isNotBlank()) "at '$path' " else ""}does not exist."
     )
 
     fun notAllowed(methodName: String, notAllowedFor: String): ErrorInfo = ErrorInfo(
-        code = formatErrorCode(5),
-        message = "$methodName operation is not supported on $notAllowedFor."
+        code = formatErrorCode(9),
+        message = "'$methodName' not supported for $notAllowedFor."
     )
 
-    val directoryCreationAlreadyExists: ErrorInfo = ErrorInfo(
-        code = formatErrorCode(5),
-        message = "Directory already exists, cannot be created."
+    fun directoryCreationAlreadyExists(path: String): ErrorInfo = ErrorInfo(
+        code = formatErrorCode(10),
+        message = "Directory ${if (path.isNotBlank()) "at '$path' " else ""}already exists, cannot be overwritten."
     )
 
     val missingParentDirectories: ErrorInfo = ErrorInfo(
-        code = formatErrorCode(6),
-        message = "Missing parent directories - either recursive=false was passed or parent directory creation failed."
+        code = formatErrorCode(11),
+        message = "Missing parent directory – possibly recursive=false was passed or parent directory creation failed."
     )
 
     val cannotDeleteChildren: ErrorInfo = ErrorInfo(
-        code = formatErrorCode(7),
-        message = "Received recursive=false, but directory has contents."
+        code = formatErrorCode(12),
+        message = "Cannot delete directory with children; received recursive=false but directory has contents."
     )
 
-    fun copyOrRenameDestinationDirectoryExists(methodName: String): ErrorInfo = ErrorInfo(
-        code = formatErrorCode(8),
-        message = "Cannot run $methodName because the destination is a directory that already exists."
-    )
-
-    fun copyOrRenameNoParentDirectory(methodName: String): ErrorInfo = ErrorInfo(
-        code = formatErrorCode(8),
-        message = "Cannot run $methodName because the destination's parent directory does not exist."
-    )
-
-    fun unknownError(methodName: String): ErrorInfo = ErrorInfo(
-        code = formatErrorCode(10),
-        message = "Unknown error occurred while trying to execute $methodName."
+    fun operationFailed(methodName: String, errorMessage: String): ErrorInfo = ErrorInfo(
+        code = formatErrorCode(13),
+        message = "'$methodName' failed with${if (errorMessage.isNotBlank()) ": $errorMessage" else "an unknown error."}"
     )
 }
 
 fun Throwable.toFilesystemError(methodName: String): FilesystemErrors.ErrorInfo = when (this) {
 
-    is IONFILEExceptions.UnresolvableUri -> FilesystemErrors.invalidPath
+    is IONFILEExceptions.UnresolvableUri -> FilesystemErrors.invalidPath(this.uri)
 
-    is IONFILEExceptions.DoesNotExist -> FilesystemErrors.doesNotExist(methodName)
+    is IONFILEExceptions.DoesNotExist -> FilesystemErrors.doesNotExist(methodName, this.path)
 
     is IONFILEExceptions.NotSupportedForContentScheme -> FilesystemErrors.notAllowed(
         methodName,
@@ -91,7 +79,8 @@ fun Throwable.toFilesystemError(methodName: String): FilesystemErrors.ErrorInfo 
         notAllowedFor = "files, only directories are supported"
     )
 
-    is IONFILEExceptions.CreateFailed.AlreadyExists -> FilesystemErrors.directoryCreationAlreadyExists
+    is IONFILEExceptions.CreateFailed.AlreadyExists ->
+        FilesystemErrors.directoryCreationAlreadyExists(this.path)
 
     is IONFILEExceptions.CreateFailed.NoParentDirectory -> FilesystemErrors.missingParentDirectories
 
@@ -103,10 +92,10 @@ fun Throwable.toFilesystemError(methodName: String): FilesystemErrors.ErrorInfo 
         FilesystemErrors.notAllowed(methodName, "the provided source and destinations")
 
     is IONFILEExceptions.CopyRenameFailed.DestinationDirectoryExists ->
-        FilesystemErrors.copyOrRenameDestinationDirectoryExists(methodName)
+        FilesystemErrors.directoryCreationAlreadyExists(this.path)
 
     is IONFILEExceptions.CopyRenameFailed.NoParentDirectory ->
-        FilesystemErrors.copyOrRenameNoParentDirectory(methodName)
+        FilesystemErrors.missingParentDirectories
 
-    else -> FilesystemErrors.unknownError(methodName)
+    else -> FilesystemErrors.operationFailed(methodName, this.localizedMessage ?: "")
 }

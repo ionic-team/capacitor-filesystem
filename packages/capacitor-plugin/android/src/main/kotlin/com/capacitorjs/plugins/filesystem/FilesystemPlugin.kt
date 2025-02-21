@@ -115,7 +115,9 @@ class FilesystemPlugin : Plugin() {
             call.data.putOpt(INPUT_APPEND, true)
         } catch (ex: JSONException) {
             Log.w(logTag, "Tried to set `append` in `PluginCall`, but got exception", ex)
-            call.sendError(FilesystemErrors.unknownError(call.methodName))
+            call.sendError(
+                FilesystemErrors.operationFailed(call.methodName, ex.localizedMessage ?: "")
+            )
             return
         }
         writeFile(call)
