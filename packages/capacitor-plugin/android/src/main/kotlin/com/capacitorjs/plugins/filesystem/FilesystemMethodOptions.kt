@@ -64,7 +64,7 @@ internal fun PluginCall.getReadFileOptions(): ReadFileOptions? {
 internal fun PluginCall.getReadFileInChunksOptions(): ReadFileInChunksOptions? {
     val uri = getSingleIONFILEUri() ?: return null
     val encodingName = getString(INPUT_ENCODING)
-    val chunkSize = getInt(INPUT_CHUNK_SIZE) ?: return null
+    val chunkSize = getInt(INPUT_CHUNK_SIZE)?.takeIf { it > 0 } ?: return null
     return ReadFileInChunksOptions(
         uri = uri,
         options = IONFILEReadInChunksOptions(

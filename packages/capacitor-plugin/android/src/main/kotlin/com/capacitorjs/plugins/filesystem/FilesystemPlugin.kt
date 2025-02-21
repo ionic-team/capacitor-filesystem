@@ -176,9 +176,7 @@ class FilesystemPlugin : Plugin() {
         }
         runWithPermission(input, call) { uri ->
             controller.listDirectory(uri)
-                .onSuccess { directoryContents ->
-                    call.sendSuccess(result = createReadDirResultObject(directoryContents))
-                }
+                .onSuccess { call.sendSuccess(result = createReadDirResultObject(it)) }
                 .onFailure { call.sendError(it.toFilesystemError(call.methodName)) }
         }
     }
@@ -210,19 +208,6 @@ class FilesystemPlugin : Plugin() {
     }
 
     @PluginMethod
-    fun copy(call: PluginCall) {
-        val input = call.getDoubleIONFILEUri() ?: run {
-            call.sendError(FilesystemErrors.invalidInputMethod(call.methodName))
-            return
-        }
-        runWithPermission(input.fromUri, input.toUri, call) { source, destination ->
-            controller.copy(source, destination)
-                .onSuccess { result -> call.sendSuccess(createUriResultObject(result)) }
-                .onFailure { call.sendError(it.toFilesystemError(call.methodName)) }
-        }
-    }
-
-    @PluginMethod
     fun rename(call: PluginCall) {
         val input = call.getDoubleIONFILEUri() ?: run {
             call.sendError(FilesystemErrors.invalidInputMethod(call.methodName))
@@ -231,6 +216,19 @@ class FilesystemPlugin : Plugin() {
         runWithPermission(input.fromUri, input.toUri, call) { source, destination ->
             controller.move(source, destination)
                 .onSuccess { call.sendSuccess() }
+                .onFailure { call.sendError(it.toFilesystemError(call.methodName)) }
+        }
+    }
+
+    @PluginMethod
+    fun copy(call: PluginCall) {
+        val input = call.getDoubleIONFILEUri() ?: run {
+            call.sendError(FilesystemErrors.invalidInputMethod(call.methodName))
+            return
+        }
+        runWithPermission(input.fromUri, input.toUri, call) { source, destination ->
+            controller.copy(source, destination)
+                .onSuccess { call.sendSuccess(createUriResultObject(it)) }
                 .onFailure { call.sendError(it.toFilesystemError(call.methodName)) }
         }
     }
