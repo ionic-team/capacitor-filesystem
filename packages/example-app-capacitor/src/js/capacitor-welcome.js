@@ -109,6 +109,7 @@ window.customElements.define(
         <button id="renameFileTestUrl" class="button">renameFileTestUrl</button>
         <br><br>
         <button id="copyFileTestUrl" class="button">copyFileTestUrl</button>
+        <br><br><br><br><br><br>
       </main>
     </div>
     `;
@@ -428,53 +429,53 @@ window.customElements.define(
         await rmdirAll('da');
         console.log('copy finished');
       });
-    }
 
-    // Helper function to run the provided promise-returning function on a single item or array of items
-    async doAll(item, callback) {
-      item = Array.isArray(item) ? item : [item];
-      for (let i of item) {
-        await callback(i);
+      // Helper function to run the provided promise-returning function on a single item or array of items
+      async function doAll(item, callback) {
+        item = Array.isArray(item) ? item : [item];
+        for (let i of item) {
+          await callback(i);
+        }
       }
-    }
-    // Create many files
-    writeAll(paths) {
-      return this.doAll(paths, (path) =>
-        Filesystem.writeFile({
-          directory: Directory.Data,
-          path: path,
-          data: path,
-          encoding: Encoding.UTF8,
-        })
-      );
-    }
-    // Delete many files
-    deleteAll(paths) {
-      return this.doAll(paths, (path) =>
-        Filesystem.deleteFile({
-          directory: Directory.Data,
-          path: path,
-        })
-      );
-    }
-    // Create many directories
-    mkdirAll(paths) {
-      return this.doAll(paths, (path) =>
-        Filesystem.mkdir({
-          directory: Directory.Data,
-          path: path,
-          recursive: true,
-        })
-      );
-    }
-    // Remove many directories
-    rmdirAll(paths) {
-      return this.doAll(paths, (path) =>
-        Filesystem.rmdir({
-          directory: Directory.Data,
-          path: path,
-        })
-      );
+      // Create many files
+      async function writeAll(paths) {
+        return doAll(paths, (path) =>
+          Filesystem.writeFile({
+            directory: Directory.Data,
+            path: path,
+            data: path,
+            encoding: Encoding.UTF8,
+          })
+        );
+      }
+      // Delete many files
+      async function deleteAll(paths) {
+        return doAll(paths, (path) =>
+          Filesystem.deleteFile({
+            directory: Directory.Data,
+            path: path,
+          })
+        );
+      }
+      // Create many directories
+      async function mkdirAll(paths) {
+        return doAll(paths, (path) =>
+          Filesystem.mkdir({
+            directory: Directory.Data,
+            path: path,
+            recursive: true,
+          })
+        );
+      }
+      // Remove many directories
+      async function rmdirAll(paths) {
+        return doAll(paths, (path) =>
+          Filesystem.rmdir({
+            directory: Directory.Data,
+            path: path,
+          })
+        );
+      }
     }
   }
 );
