@@ -71,7 +71,7 @@ class FilesystemPlugin : Plugin() {
         }
     }
 
-    @PluginMethod
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
     fun readFileInChunks(call: PluginCall) {
         val input: ReadFileInChunksOptions = call.getReadFileInChunksOptions() ?: run {
             call.sendError(FilesystemErrors.invalidInputMethod(call.methodName))
@@ -82,8 +82,14 @@ class FilesystemPlugin : Plugin() {
                 .onEach { chunk ->
                     call.sendSuccess(result = createReadResultObject(chunk), keepCallback = true)
                 }
-                .onCompletion { call.sendSuccess(result = createReadResultObject("")) }
-                .catch { call.sendError(it.toFilesystemError(call.methodName)) }
+                .onCompletion { error ->
+                    if (error == null) {
+                        call.sendSuccess(result = createReadResultObject(""))
+                    }
+                }
+                .catch {
+                    call.sendError(it.toFilesystemError(call.methodName))
+                }
                 .launchIn(coroutineScope)
         }
     }
