@@ -13,22 +13,22 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-- Uploading files 
+- Uploading files.
 
 ### Fixes 
 
-- (Possible quick win - not confirmed yet) **android:** Issues with directories in `downloadFile` (https://github.com/ionic-team/capacitor-plugins/issues/1717 + https://github.com/ionic-team/capacitor-plugins/issues/1835)
+- (Possible quick win - not confirmed yet) **android:** Issues with directories in `downloadFile` ([capacitor-plugins#1717](https://github.com/ionic-team/capacitor-plugins/issues/1717) + [capacitor-plugins#1835](https://github.com/ionic-team/capacitor-plugins/issues/1835)).
 
 # 7.1.0.dev.1 (unifying file)
 
 ### Features
 
-- Revamp error messages and add error codes for better error-handling (https://github.com/ionic-team/capacitor-plugins/issues/326 + https://github.com/ionic-team/capacitor-plugins/issues/351).
 - Rewrite plugin using native Android and iOS libraries.
-- Support reading files in chunks (https://github.com/ionic-team/capacitor-plugins/issues/2091 + https://github.com/ionic-team/capacitor-plugins/issues/12).
-- Return name in `stat` (https://github.com/ionic-team/capacitor-plugins/issues/2019)
-- Additional directory types: `LibraryNoCloud` and `Temporary` (https://github.com/ionic-team/capacitor-plugins/issues/993)
-- **android:** Better support for `content://` Uri's (https://github.com/ionic-team/capacitor-plugins/issues/308 + https://github.com/ionic-team/capacitor-plugins/issues/2105 + https://github.com/ionic-team/capacitor/issues/6114)
+- **android + ios:** Revamp error messages and add error codes for better error-handling ([capacitor-plugins#326](https://github.com/ionic-team/capacitor-plugins/issues/326) + [capacitor-plugins#351](https://github.com/ionic-team/capacitor-plugins/issues/351)).
+- Support reading files in chunks ([capacitor-plugins#2091](https://github.com/ionic-team/capacitor-plugins/issues/2091) + [capacitor-plugins#12](https://github.com/ionic-team/capacitor-plugins/issues/12)).
+- Return name in `stat` ([capacitor-plugins#2019](https://github.com/ionic-team/capacitor-plugins/issues/2019)).
+- Additional directory types: `LibraryNoCloud` and `Temporary` ([capacitor-plugins#993](https://github.com/ionic-team/capacitor-plugins/issues/993)).
+- **android:** Better support for `content://` Uri's ([capacitor-plugins#308](https://github.com/ionic-team/capacitor-plugins/issues/308) + [capacitor-plugins#2105](https://github.com/ionic-team/capacitor-plugins/issues/2105) + [capacitor-plugins#6114](https://github.com/ionic-team/capacitor/issues/6114)).
 
 ### Fixes
 
