@@ -1,3 +1,4 @@
+import Foundation
 import IONFilesystemLib
 
 extension IONFILEStringEncoding {
@@ -17,13 +18,15 @@ extension IONFILEDirectoryType {
         case Constants.DirectoryTypeValue.cache: .cache
         case Constants.DirectoryTypeValue.data, Constants.DirectoryTypeValue.documents, Constants.DirectoryTypeValue.external, Constants.DirectoryTypeValue.externalCache, Constants.DirectoryTypeValue.externalStorage: .document
         case Constants.DirectoryTypeValue.library: .library
+        case Constants.DirectoryTypeValue.libraryNoCloud: .notSyncedLibrary
+        case Constants.DirectoryTypeValue.temporary: .temporary
         default: nil
         }
     }
 }
 
-extension IONFILEEncodingValueMapper: @retroactive CustomStringConvertible {
-    public var description: String {
+extension IONFILEEncodingValueMapper {
+    var textValue: String {
         switch self {
         case .byteBuffer(let data): data.base64EncodedString()
         case .string(_, let text): text
