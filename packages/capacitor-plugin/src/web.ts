@@ -22,6 +22,8 @@ import type {
   WriteFileResult,
   Directory,
   ReadFileInChunksOptions,
+  CallbackID,
+  ReadFileInChunksCallback,
 } from './definitions';
 import { Encoding } from './definitions';
 
@@ -49,7 +51,7 @@ function isPathParent(parent: string, children: string): boolean {
 }
 
 export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
-  readFileInChunks(_options: ReadFileInChunksOptions): Promise<ReadFileResult> {
+  readFileInChunks(_options: ReadFileInChunksOptions, _callback: ReadFileInChunksCallback): Promise<CallbackID> {
     throw this.unavailable('Method not implemented.');
   }
   DB_VERSION = 1;

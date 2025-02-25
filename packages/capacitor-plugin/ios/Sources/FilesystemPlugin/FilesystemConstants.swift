@@ -1,4 +1,8 @@
 struct Constants {
+    struct ConfigurationValue {
+        static let endOfFile = ""
+    }
+
     struct DirectoryTypeValue {
         static let cache = "CACHE"
         static let data = "DATA"
@@ -7,6 +11,8 @@ struct Constants {
         static let externalCache = "EXTERNAL_CACHE"
         static let externalStorage = "EXTERNAL_STORAGE"
         static let library = "LIBRARY"
+        static let libraryNoCloud = "LIBRARY_NO_CLOUD"
+        static let temporary = "TEMPORARY"
     }
 
     struct FileItemTypeValue {
@@ -19,6 +25,7 @@ struct Constants {
         static let data = "data"
         static let directory = "directory"
         static let encoding = "encoding"
+        static let chunkSize = "chunkSize"
         static let from = "from"
         static let path = "path"
         static let recursive = "recursive"

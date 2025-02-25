@@ -1,18 +1,27 @@
 import Capacitor
 import Foundation
 import IONFilesystemLib
+import Combine
 
-struct FilesystemOperationExecutor {
+class FilesystemOperationExecutor {
     let service: FileService
+    private var cancellables = Set<AnyCancellable>()
+
+    init(service: FileService) {
+        self.service = service
+    }
 
     func execute(_ operation: FilesystemOperation, _ call: CAPPluginCall) {
         do {
             var resultData: PluginCallResultData?
 
             switch operation {
-            case .read(let url, let encoding):
-                let data = try service.readEntireFile(atURL: url, withEncoding: encoding).description
+            case .readFile(let url, let encoding):
+                let data = try service.readEntireFile(atURL: url, withEncoding: encoding).textValue
                 resultData = [Constants.ResultDataKey.data: data]
+            case .readFileInChunks(let url, let encoding, let chunkSize):
+                try processFileInChunks(at: url, withEncoding: encoding, chunkSize: chunkSize, for: operation, call)
+                return
             case .write(let url, let encodingMapper, let recursive):
                 try service.saveFile(atURL: url, withEncodingAndData: encodingMapper, includeIntermediateDirectories: recursive)
                 resultData = [Constants.ResultDataKey.uri: url.absoluteString]
@@ -47,19 +56,56 @@ struct FilesystemOperationExecutor {
 }
 
 private extension FilesystemOperationExecutor {
+    func processFileInChunks(at url: URL, withEncoding encoding: IONFILEEncoding, chunkSize: Int, for operation: FilesystemOperation, _ call: CAPPluginCall) throws {
+        let chunkSizeToUse = chunkSizeToUse(basedOn: chunkSize, and: encoding)
+        try service.readFileInChunks(atURL: url, withEncoding: encoding, andChunkSize: chunkSizeToUse)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    call.handleSuccess([Constants.ResultDataKey.data: Constants.ConfigurationValue.endOfFile])
+                case .failure(let error):
+                    call.handleError(self.mapError(error, for: operation))
+                }
+            }, receiveValue: {
+                call.handleSuccess([Constants.ResultDataKey.data: $0.textValue], true)
+            })
+            .store(in: &cancellables)
+    }
+
+    private func chunkSizeToUse(basedOn chunkSize: Int, and encoding: IONFILEEncoding) -> Int {
+        // When dealing with byte buffers, we need chunk size that are multiples of 3
+        // We're treating byte buffers as base64 data, and size multiple of 3 makes it so that chunks can be concatenated
+        encoding == .byteBuffer ? chunkSize - chunkSize % 3 + 3 : chunkSize
+    }
+
     func mapError(_ error: Error, for operation: FilesystemOperation) -> FilesystemError {
-        return switch operation {
-        case .read: .operationFailed(method: .read, error)
-        case .write: .operationFailed(method: .writeFile, error)
-        case .append: .operationFailed(method: .appendFile, error)
-        case .delete: .operationFailed(method: .deleteFile, error)
-        case .mkdir: .operationFailed(method: .mkdir, error)
-        case .rmdir: .operationFailed(method: .rmdir, error)
-        case .readdir: .operationFailed(method: .readdir, error)
-        case .stat: .operationFailed(method: .stat, error)
-        case .getUri: .invalidPath("")
-        case .rename: .operationFailed(method: .rename, error)
-        case .copy: .operationFailed(method: .copy, error)
+        var path = ""
+        var method: IONFileMethod = IONFileMethod.getUri
+        switch operation {
+        case .readFile(let url, _): path = url.absoluteString; method = .readFile
+        case .readFileInChunks(let url, _, _): path = url.absoluteString; method = .readFileInChunks
+        case .write(let url, _, _): path = url.absoluteString; method = .writeFile
+        case .append(let url, _, _): path = url.absoluteString; method = .appendFile
+        case .delete(let url): path = url.absoluteString; method = .deleteFile
+        case .mkdir(let url, _): path = url.absoluteString; method = .mkdir
+        case .rmdir(let url, _): path = url.absoluteString; method = .rmdir
+        case .readdir(let url): path = url.absoluteString; method = .readdir
+        case .stat(let url): path = url.absoluteString; method = .stat
+        case .getUri(let url): return FilesystemError.invalidPath(url.absoluteString)
+        case .rename(let sourceUrl, _): path = sourceUrl.absoluteString; method = .rename
+        case .copy(let sourceUrl, _): path = sourceUrl.absoluteString; method = .copy
+        }
+
+        return mapError(error, withPath: path, andMethod: method)
+    }
+
+    private func mapError(_ error: Error, withPath path: String, andMethod method: IONFileMethod) -> FilesystemError {
+        return switch error {
+        case IONFILEDirectoryManagerError.notEmpty: .cannotDeleteChildren
+        case IONFILEDirectoryManagerError.alreadyExists: .directoryAlreadyExists(path)
+        case IONFILEFileManagerError.missingParentFolder: .parentDirectoryMissing
+        case IONFILEFileManagerError.fileNotFound: .fileNotFound(method: method, path)
+        default: .operationFailed(method: method, error)
         }
     }
 

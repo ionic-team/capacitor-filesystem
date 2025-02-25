@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
-// swift-module-flags: -target arm64-apple-ios14.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name IONFilesystemLib
-// swift-module-flags-ignorable: -enable-bare-slash-regex
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios14.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name IONFilesystemLib
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
 import Combine
 import Foundation
 import Swift
@@ -111,6 +111,39 @@ extension IONFilesystemLib.IONFILEManager : IONFilesystemLib.IONFILEFileManager 
   public func renameItem(fromURL originURL: Foundation.URL, toURL destinationURL: Foundation.URL) throws
   public func copyItem(fromURL originURL: Foundation.URL, toURL destinationURL: Foundation.URL) throws
 }
+public protocol IONFILEError : Foundation.LocalizedError, Swift.Equatable {
+}
+public enum IONFILEDirectoryManagerError : IONFilesystemLib.IONFILEError {
+  case notEmpty
+  case alreadyExists
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public static func == (a: IONFilesystemLib.IONFILEDirectoryManagerError, b: IONFilesystemLib.IONFILEDirectoryManagerError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum IONFILEFileManagerError : IONFilesystemLib.IONFILEError {
+  case cantCreateURL(forPath: Swift.String)
+  case cantDecodeData(usingEncoding: IONFilesystemLib.IONFILEStringEncoding)
+  case directoryNotFound(atPath: Swift.String)
+  case fileNotFound(atPath: Swift.String)
+  case missingParentFolder
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public static func == (a: IONFilesystemLib.IONFILEFileManagerError, b: IONFilesystemLib.IONFILEFileManagerError) -> Swift.Bool
+}
+public enum IONFILEChunkPublisherError : IONFilesystemLib.IONFILEError {
+  case cantEncodeData(usingEncoding: IONFilesystemLib.IONFILEStringEncoding)
+  case notAbleToReadFile
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public static func == (a: IONFilesystemLib.IONFILEChunkPublisherError, b: IONFilesystemLib.IONFILEChunkPublisherError) -> Swift.Bool
+}
 extension Foundation.URL {
   public var urlPath: Swift.String {
     get
@@ -123,3 +156,4 @@ extension IONFilesystemLib.IONFILEStringEncoding : Swift.Hashable {}
 extension IONFilesystemLib.IONFILEStringEncoding : Swift.RawRepresentable {}
 extension IONFilesystemLib.IONFILEDirectoryType : Swift.Equatable {}
 extension IONFilesystemLib.IONFILEDirectoryType : Swift.Hashable {}
+extension IONFilesystemLib.IONFILEDirectoryManagerError : Swift.Hashable {}

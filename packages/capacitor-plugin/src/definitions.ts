@@ -1,5 +1,7 @@
 import type { PermissionState } from '@capacitor/core';
 
+export type CallbackID = string;
+
 export interface PermissionStatus {
   publicStorage: PermissionState;
 }
@@ -483,6 +485,13 @@ export interface CopyResult {
   uri: string;
 }
 
+/**
+ * Callback for receiving chunks read from a file, or error if something went wrong.
+ *
+ * @since 7.1.0
+ */
+export type ReadFileInChunksCallback = (chunkRead: ReadFileResult | null, err?: any) => void;
+
 export interface FilesystemPlugin {
   /**
    * Check read/write permissions.
@@ -510,12 +519,14 @@ export interface FilesystemPlugin {
   readFile(options: ReadFileOptions): Promise<ReadFileResult>;
 
   /**
-   * Read a file from disk, in chunks
-   * Native only (not available in web)
+   * Read a file from disk, in chunks.
+   * Native only (not available in web).
+   * Use the callback to receive each read chunk.
+   * If empty chunk is returned, it means file has been completely read.
    *
    * @since 7.1.0
    */
-  readFileInChunks(options: ReadFileInChunksOptions): Promise<ReadFileResult>;
+  readFileInChunks(options: ReadFileInChunksOptions, callback: ReadFileInChunksCallback): Promise<CallbackID>;
 
   /**
    * Write a file to disk in the specified location on device
@@ -588,7 +599,62 @@ export interface FilesystemPlugin {
   copy(options: CopyOptions): Promise<CopyResult>;
 }
 
+/**
+ * Structure for errors returned by the plugin.
+ *
+ * `code` follows "OS-PLUG-FILE-XXXX" format
+ *
+ * @since 1.0.0
+ */
 export type PluginError = {
   code: string;
   message: string;
 };
+
+/**
+ * @deprecated Use `ReadFileOptions`.
+ * @since 1.0.0
+ */
+export type FileReadOptions = ReadFileOptions;
+
+/**
+ * @deprecated Use `ReadFileResult`.
+ * @since 1.0.0
+ */
+export type FileReadResult = ReadFileResult;
+
+/**
+ * @deprecated Use `WriteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileWriteOptions = WriteFileOptions;
+
+/**
+ * @deprecated Use `WriteFileResult`.
+ * @since 1.0.0
+ */
+export type FileWriteResult = WriteFileResult;
+
+/**
+ * @deprecated Use `AppendFileOptions`.
+ * @since 1.0.0
+ */
+export type FileAppendOptions = AppendFileOptions;
+
+/**
+ * @deprecated Use `DeleteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileDeleteOptions = DeleteFileOptions;
+
+/**
+ * @deprecated Use `Directory`.
+ * @since 1.0.0
+ */
+export const FilesystemDirectory = Directory;
+
+/**
+ * @deprecated Use `Encoding`.
+ * @since 1.0.0
+ */
+export const FilesystemEncoding = Encoding;
