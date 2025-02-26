@@ -9,17 +9,17 @@ import io.ionic.libs.ionfilesystemlib.model.IONFILESaveMode
 import io.ionic.libs.ionfilesystemlib.model.IONFILESaveOptions
 import io.ionic.libs.ionfilesystemlib.model.IONFILEUri
 
-internal val INPUT_APPEND = "append"
-private val INPUT_PATH = "path"
-private val INPUT_DIRECTORY = "directory"
-private val INPUT_ENCODING = "encoding"
-private val INPUT_CHUNK_SIZE = "chunkSize"
-private val INPUT_DATA = "data"
-private val INPUT_RECURSIVE = "recursive"
-private val INPUT_FROM = "from"
-private val INPUT_FROM_DIRECTORY = "directory"
-private val INPUT_TO = "to"
-private val INPUT_TO_DIRECTORY = "toDirectory"
+internal const val INPUT_APPEND = "append"
+private const val INPUT_PATH = "path"
+private const val INPUT_DIRECTORY = "directory"
+private const val INPUT_ENCODING = "encoding"
+private const val INPUT_CHUNK_SIZE = "chunkSize"
+private const val INPUT_DATA = "data"
+private const val INPUT_RECURSIVE = "recursive"
+private const val INPUT_FROM = "from"
+private const val INPUT_FROM_DIRECTORY = "directory"
+private const val INPUT_TO = "to"
+private const val INPUT_TO_DIRECTORY = "toDirectory"
 
 internal data class ReadFileOptions(
     val uri: IONFILEUri.Unresolved,
@@ -51,11 +51,8 @@ internal data class DoubleUri(
  */
 internal fun PluginCall.getReadFileOptions(): ReadFileOptions? {
     val uri = getSingleIONFILEUri() ?: return null
-    val encodingName = getString(INPUT_ENCODING)
-    return ReadFileOptions(
-        uri = uri,
-        options = IONFILEReadOptions(IONFILEEncoding.fromEncodingName(encodingName))
-    )
+    val encoding = IONFILEEncoding.fromEncodingName(getString(INPUT_ENCODING))
+    return ReadFileOptions(uri = uri, options = IONFILEReadOptions(encoding))
 }
 
 /**
@@ -63,14 +60,11 @@ internal fun PluginCall.getReadFileOptions(): ReadFileOptions? {
  */
 internal fun PluginCall.getReadFileInChunksOptions(): ReadFileInChunksOptions? {
     val uri = getSingleIONFILEUri() ?: return null
-    val encodingName = getString(INPUT_ENCODING)
+    val encoding = IONFILEEncoding.fromEncodingName(getString(INPUT_ENCODING))
     val chunkSize = getInt(INPUT_CHUNK_SIZE)?.takeIf { it > 0 } ?: return null
     return ReadFileInChunksOptions(
         uri = uri,
-        options = IONFILEReadInChunksOptions(
-            IONFILEEncoding.fromEncodingName(encodingName),
-            chunkSize
-        )
+        options = IONFILEReadInChunksOptions(encoding, chunkSize)
     )
 }
 
@@ -82,13 +76,14 @@ internal fun PluginCall.getWriteFileOptions(): WriteFileOptions? {
     val data = getString(INPUT_DATA) ?: return null
     val recursive = getBoolean(INPUT_RECURSIVE) ?: false
     val append = getBoolean(INPUT_APPEND) ?: false
-    val encodingName = getString(INPUT_ENCODING)
+    val saveMode = if (append) IONFILESaveMode.APPEND else IONFILESaveMode.WRITE
+    val encoding = IONFILEEncoding.fromEncodingName(getString(INPUT_ENCODING))
     return WriteFileOptions(
         uri = uri,
         options = IONFILESaveOptions(
             data = data,
-            encoding = IONFILEEncoding.fromEncodingName(encodingName),
-            mode = if (append) IONFILESaveMode.APPEND else IONFILESaveMode.WRITE,
+            encoding = encoding,
+            mode = saveMode,
             createFileRecursive = recursive
         )
     )

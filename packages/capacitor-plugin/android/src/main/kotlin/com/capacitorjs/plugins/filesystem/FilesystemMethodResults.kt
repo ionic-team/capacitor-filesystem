@@ -49,11 +49,7 @@ fun IONFILEMetadataResult.toResultObject(): JSObject = JSObject().apply {
     put(OUTPUT_TYPE, if (type is IONFILEFileType.Directory) "directory" else "file")
     put(OUTPUT_SIZE, size)
     put(OUTPUT_MODIFIED_TIME, lastModifiedTimestamp)
-    if (createdTimestamp != null) {
-        put(OUTPUT_CREATED_TIME, createdTimestamp)
-    } else {
-        put(OUTPUT_CREATED_TIME, null)
-    }
+    put(OUTPUT_CREATED_TIME, createdTimestamp)
     put(OUTPUT_URI, uri)
 }
 
