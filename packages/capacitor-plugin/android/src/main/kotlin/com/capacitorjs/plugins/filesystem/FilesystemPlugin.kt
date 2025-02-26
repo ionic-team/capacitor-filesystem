@@ -120,7 +120,7 @@ class FilesystemPlugin : Plugin() {
         try {
             call.data.putOpt(INPUT_APPEND, true)
         } catch (ex: JSONException) {
-            Log.w(logTag, "Tried to set `append` in `PluginCall`, but got exception", ex)
+            Log.e(logTag, "Tried to set `append` in `PluginCall`, but got exception", ex)
             call.sendError(
                 FilesystemErrors.operationFailed(call.methodName, ex.localizedMessage ?: "")
             )
@@ -265,6 +265,9 @@ class FilesystemPlugin : Plugin() {
         }
 
         when (call.methodName) {
+            // appendFile and writeFile have the same implementation, hence the same method is called;
+            //  the only difference being that we add a boolean for append in the PluginCall,
+            //  which is done before this method is called.
             "appendFile", "writeFile" -> writeFile(call)
             "deleteFile" -> deleteFile(call)
             "mkdir" -> mkdir(call)
