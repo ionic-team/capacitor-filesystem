@@ -1,6 +1,2 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
-
-// this is here until native library is published; TODO remove this once that happens.
-include ':tmp-native-lib-android'
-project(':tmp-native-lib-android').projectDir = new File('../../tmp_native_lib_android')
