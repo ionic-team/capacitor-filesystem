@@ -3,6 +3,7 @@ package com.capacitorjs.plugins.filesystem
 import android.Manifest
 import android.media.MediaScannerConnection
 import android.os.Build
+import android.os.Environment
 import android.util.Log
 import com.getcapacitor.JSObject
 import com.getcapacitor.Logger
@@ -13,6 +14,7 @@ import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
+import com.getcapacitor.plugin.util.HttpRequestHandler.ProgressEmitter
 import io.ionic.libs.ionfilesystemlib.IONFILEController
 import io.ionic.libs.ionfilesystemlib.model.IONFILECreateOptions
 import io.ionic.libs.ionfilesystemlib.model.IONFILEDeleteOptions
@@ -50,8 +52,15 @@ private const val PERMISSION_GRANTED = "granted"
 )
 class FilesystemPlugin : Plugin() {
 
+    private var legacyImplementation: LegacyFilesystemImplementation? = null
+
     private val coroutineScope: CoroutineScope by lazy { CoroutineScope(Dispatchers.Main) }
     private val controller: IONFILEController by lazy { IONFILEController(context.applicationContext) }
+
+    override fun load() {
+        super.load()
+        legacyImplementation = LegacyFilesystemImplementation(context)
+    }
 
     override fun handleOnDestroy() {
         super.handleOnDestroy()
@@ -234,8 +243,52 @@ class FilesystemPlugin : Plugin() {
     }
 
     @PluginMethod
+    @Deprecated("Use @capacitor/file-transfer plugin instead")
     fun downloadFile(call: PluginCall) {
-        TODO("To be implemented in the near future")
+        try {
+            val directory = call.getString("directory", Environment.DIRECTORY_DOWNLOADS)
+
+            if (legacyImplementation?.isPublicDirectory(directory) == true &&
+                !isStoragePermissionGranted(false)
+            ) {
+                requestAllPermissions(call, "permissionCallback")
+                return
+            }
+
+            val emitter = ProgressEmitter { bytes: Int?, contentLength: Int? ->
+                val ret = JSObject()
+                ret.put("url", call.getString("url"))
+                ret.put("bytes", bytes)
+                ret.put("contentLength", contentLength)
+                notifyListeners("progress", ret)
+            }
+
+            legacyImplementation?.downloadFile(
+                call,
+                bridge,
+                emitter,
+                object : LegacyFilesystemImplementation.FilesystemDownloadCallback {
+                    override fun onSuccess(result: JSObject) {
+                        // update mediaStore index only if file was written to external storage
+                        if (legacyImplementation?.isPublicDirectory(directory) == true) {
+                            MediaScannerConnection.scanFile(
+                                context,
+                                arrayOf(result.getString("path")),
+                                null,
+                                null
+                            )
+                        }
+                        call.resolve(result)
+                    }
+
+                    override fun onError(error: Exception) {
+                        call.reject("Error downloading file: " + error.localizedMessage, error)
+                    }
+                }
+            )
+        } catch (ex: Exception) {
+            call.reject("Error downloading file: " + ex.localizedMessage, ex)
+        }
     }
 
     @PluginMethod

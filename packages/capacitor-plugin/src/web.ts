@@ -1,4 +1,4 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin, buildRequestInit } from '@capacitor/core';
 
 import type {
   AppendFileOptions,
@@ -23,6 +23,9 @@ import type {
   Directory,
   ReadFileInChunksOptions,
   CallbackID,
+  DownloadFileOptions,
+  DownloadFileResult,
+  ProgressStatus,
   ReadFileInChunksCallback,
 } from './definitions';
 import { Encoding } from './definitions';
@@ -617,6 +620,68 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
       uri: toPath,
     };
   }
+
+  /**
+   * Function that performs a http request to a server and downloads the file to the specified destination
+   *
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   * @param options the options for the download operation
+   * @returns a promise that resolves with the download file result
+   */
+  public downloadFile = async (options: DownloadFileOptions): Promise<DownloadFileResult> => {
+    const requestInit = buildRequestInit(options, options.webFetchExtra);
+    const response = await fetch(options.url, requestInit);
+    let blob: Blob;
+
+    if (!options.progress) blob = await response.blob();
+    else if (!response?.body) blob = new Blob();
+    else {
+      const reader = response.body.getReader();
+
+      let bytes = 0;
+      const chunks: (Uint8Array | undefined)[] = [];
+
+      const contentType: string | null = response.headers.get('content-type');
+      const contentLength: number = parseInt(response.headers.get('content-length') || '0', 10);
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        chunks.push(value);
+        bytes += value?.length || 0;
+
+        const status: ProgressStatus = {
+          url: options.url,
+          bytes,
+          contentLength,
+        };
+
+        this.notifyListeners('progress', status);
+      }
+
+      const allChunks = new Uint8Array(bytes);
+      let position = 0;
+      for (const chunk of chunks) {
+        if (typeof chunk === 'undefined') continue;
+
+        allChunks.set(chunk, position);
+        position += chunk.length;
+      }
+
+      blob = new Blob([allChunks.buffer], { type: contentType || undefined });
+    }
+
+    const result = await this.writeFile({
+      path: options.path,
+      directory: options.directory ?? undefined,
+      recursive: options.recursive ?? false,
+      data: blob,
+    });
+
+    return { path: result.uri, blob };
+  };
 
   private isBase64String(str: string): boolean {
     try {
