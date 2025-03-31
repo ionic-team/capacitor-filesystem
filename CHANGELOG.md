@@ -3,22 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# 7.1.0.dev.3 (file viewer?)
-
-### Features
-
-- Opening and previewing files natively.
-
-# 7.1.0.dev.2 (file transfer additions?)
-
-### Features
-
-- Uploading files.
-
-### Fixes 
-
-- (Possible quick win - not confirmed yet) **android:** Issues with directories in `downloadFile` ([capacitor-plugins#1717](https://github.com/ionic-team/capacitor-plugins/issues/1717) + [capacitor-plugins#1835](https://github.com/ionic-team/capacitor-plugins/issues/1835)).
-
 # 7.1.0.dev.1 (unifying file)
 
 ### Features
