@@ -133,6 +133,9 @@ const readFilePath = async () => {
 * [`stat(...)`](#stat)
 * [`rename(...)`](#rename)
 * [`copy(...)`](#copy)
+* [`downloadFile(...)`](#downloadfile)
+* [`addListener('progress', ...)`](#addlistenerprogress-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -400,6 +403,67 @@ Copy a file or directory
 --------------------
 
 
+### downloadFile(...)
+
+```typescript
+downloadFile(options: DownloadFileOptions) => Promise<DownloadFileResult>
+```
+
+Perform a http request to a server and download the file to the specified destination.
+
+This method has been deprecated since version 7.1.0.
+We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#downloadfileoptions">DownloadFileOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#downloadfileresult">DownloadFileResult</a>&gt;</code>
+
+**Since:** 5.1.0
+
+--------------------
+
+
+### addListener('progress', ...)
+
+```typescript
+addListener(eventName: 'progress', listenerFunc: ProgressListener) => Promise<PluginListenerHandle>
+```
+
+Add a listener to file download progress events.
+
+This method has been deprecated since version 7.1.0.
+We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+
+| Param              | Type                                                          |
+| ------------------ | ------------------------------------------------------------- |
+| **`eventName`**    | <code>'progress'</code>                                       |
+| **`listenerFunc`** | <code><a href="#progresslistener">ProgressListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 5.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+This method has been deprecated since version 7.1.0.
+We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+
+**Since:** 5.2.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -554,6 +618,40 @@ Copy a file or directory
 | **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
 
 
+#### DownloadFileResult
+
+| Prop       | Type                | Description                                                          | Since |
+| ---------- | ------------------- | -------------------------------------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path the file was downloaded to.                                 | 5.1.0 |
+| **`blob`** | <code>Blob</code>   | The blob data of the downloaded file. This is only available on web. | 5.1.0 |
+
+
+#### DownloadFileOptions
+
+| Prop            | Type                                            | Description                                                                                                                                                                                                                      | Default            | Since |
+| --------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`path`**      | <code>string</code>                             | The path the downloaded file should be moved to.                                                                                                                                                                                 |                    | 5.1.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The directory to write the file to. If this option is used, filePath can be a relative path rather than absolute. The default is the `DATA` directory.                                                                           |                    | 5.1.0 |
+| **`progress`**  | <code>boolean</code>                            | An optional listener function to receive downloaded progress events. If this option is used, progress event should be dispatched on every chunk received. Chunks are throttled to every 100ms on Android/iOS to avoid slowdowns. |                    | 5.1.0 |
+| **`recursive`** | <code>boolean</code>                            | Whether to create any missing parent directories.                                                                                                                                                                                | <code>false</code> | 5.1.2 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### ProgressStatus
+
+| Prop                | Type                | Description                                          | Since |
+| ------------------- | ------------------- | ---------------------------------------------------- | ----- |
+| **`url`**           | <code>string</code> | The url of the file being downloaded.                | 5.1.0 |
+| **`bytes`**         | <code>number</code> | The number of bytes downloaded so far.               | 5.1.0 |
+| **`contentLength`** | <code>number</code> | The total number of bytes to download for this file. | 5.1.0 |
+
+
 ### Type Aliases
 
 
@@ -582,6 +680,13 @@ Callback for receiving chunks read from a file, or error if something went wrong
 #### RenameOptions
 
 <code><a href="#copyoptions">CopyOptions</a></code>
+
+
+#### ProgressListener
+
+A listener function that receives progress events.
+
+<code>(progress: <a href="#progressstatus">ProgressStatus</a>): void</code>
 
 
 ### Enums

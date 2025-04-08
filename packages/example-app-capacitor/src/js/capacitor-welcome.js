@@ -109,6 +109,11 @@ window.customElements.define(
         <button id="renameFileTestUrl" class="button">renameFileTestUrl</button>
         <br><br>
         <button id="copyFileTestUrl" class="button">copyFileTestUrl</button>
+        <br><br>
+        <button id="downloadSmallFile" class="button">deprecated downloadFile (small)</button>
+        <br><br>
+        <button id="downloadLargeFile" class="button">deprecated downloadFile (large)</button>
+        <br><br>
         <br><br><br><br><br><br>
       </main>
     </div>
@@ -429,6 +434,37 @@ window.customElements.define(
         await rmdirAll('da');
         console.log('copy finished');
       });
+      self.shadowRoot.querySelector("#downloadSmallFile").addEventListener('click', async function (e) {
+        download('https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf');
+      });
+      self.shadowRoot.querySelector("#downloadLargeFile").addEventListener('click', async function (e) {
+        download('https://raw.githubusercontent.com/kyokidG/large-pdf-viewer-poc/58a3df6adc4fe9bd5f02d2f583d6747e187d93ae/public/test2.pdf');
+      });
+
+      // download a file from the provided url
+      async function download(file) {
+        try {
+          const fileUrlSplit = file.split('/');
+          const path = fileUrlSplit[fileUrlSplit.length - 1];
+    
+          Filesystem.addListener('progress', (status) => {
+            const progress = status.bytes / status.contentLength;
+            console.log("Download progress -> " + progress);
+          });
+    
+          const downloadFileResult = await Filesystem.downloadFile({
+            url: file,
+            directory: Directory.Cache,
+            path,
+            progress: true,
+          });
+    
+          console.log('Downloaded file!', downloadFileResult);
+          alert('Downloaded file successfully!');
+        } catch (err) {
+          console.error('Unable to download file', err);
+        }
+      };
 
       // Helper function to run the provided promise-returning function on a single item or array of items
       async function doAll(item, callback) {

@@ -30,6 +30,8 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
     ]
 
+    private let legacyImplementation = LegacyFilesystemImplementation()
+
     private var fileService: FileService?
 
     override public func load() {
@@ -170,21 +172,25 @@ private extension FilesystemPlugin {
         }
     }
 
+    /**
+     * [DEPRECATED] Download a file
+     */
+    @available(*, deprecated, message: "Use @capacitor/file-transfer plugin instead.")
     @objc func downloadFile(_ call: CAPPluginCall) {
-        //        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
-        //        let progressEmitter: Filesystem.ProgressEmitter = { bytes, contentLength in
-        //            self.notifyListeners("progress", data: [
-        //                "url": url,
-        //                "bytes": bytes,
-        //                "contentLength": contentLength
-        //            ])
-        //        }
-        //
-        //        do {
-        //            try implementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
-        //        } catch let error {
-        //            call.reject(error.localizedDescription)
-        //        }
+        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
+        let progressEmitter: LegacyFilesystemImplementation.ProgressEmitter = { bytes, contentLength in
+            self.notifyListeners("progress", data: [
+                "url": url,
+                "bytes": bytes,
+                "contentLength": contentLength
+            ])
+        }
+
+        do {
+            try legacyImplementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
+        } catch let error {
+            call.reject(error.localizedDescription)
+        }
     }
 }
 

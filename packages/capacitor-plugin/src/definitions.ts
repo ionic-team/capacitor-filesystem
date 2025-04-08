@@ -1,4 +1,4 @@
-import type { PermissionState } from '@capacitor/core';
+import type { HttpOptions, PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 export type CallbackID = string;
 
@@ -479,12 +479,88 @@ export interface CopyResult {
   uri: string;
 }
 
+export interface DownloadFileOptions extends HttpOptions {
+  /**
+   * The path the downloaded file should be moved to.
+   *
+   * @since 5.1.0
+   */
+  path: string;
+  /**
+   * The directory to write the file to.
+   * If this option is used, filePath can be a relative path rather than absolute.
+   * The default is the `DATA` directory.
+   *
+   * @since 5.1.0
+   */
+  directory?: Directory;
+  /**
+   * An optional listener function to receive downloaded progress events.
+   * If this option is used, progress event should be dispatched on every chunk received.
+   * Chunks are throttled to every 100ms on Android/iOS to avoid slowdowns.
+   *
+   * @since 5.1.0
+   */
+  progress?: boolean;
+  /**
+   * Whether to create any missing parent directories.
+   *
+   * @default false
+   * @since 5.1.2
+   */
+  recursive?: boolean;
+}
+
+export interface DownloadFileResult {
+  /**
+   * The path the file was downloaded to.
+   *
+   * @since 5.1.0
+   */
+  path?: string;
+  /**
+   * The blob data of the downloaded file.
+   * This is only available on web.
+   *
+   * @since 5.1.0
+   */
+  blob?: Blob;
+}
+
+export interface ProgressStatus {
+  /**
+   * The url of the file being downloaded.
+   *
+   * @since 5.1.0
+   */
+  url: string;
+  /**
+   * The number of bytes downloaded so far.
+   *
+   * @since 5.1.0
+   */
+  bytes: number;
+  /**
+   * The total number of bytes to download for this file.
+   *
+   * @since 5.1.0
+   */
+  contentLength: number;
+}
+
 /**
  * Callback for receiving chunks read from a file, or error if something went wrong.
  *
  * @since 7.1.0
  */
 export type ReadFileInChunksCallback = (chunkRead: ReadFileResult | null, err?: any) => void;
+
+/**
+ * A listener function that receives progress events.
+ *
+ * @since 5.1.0
+ */
+export type ProgressListener = (progress: ProgressStatus) => void;
 
 export interface FilesystemPlugin {
   /**
@@ -591,6 +667,39 @@ export interface FilesystemPlugin {
    * @since 1.0.0
    */
   copy(options: CopyOptions): Promise<CopyResult>;
+
+  /**
+   * Perform a http request to a server and download the file to the specified destination.
+   *
+   * This method has been deprecated since version 7.1.0.
+   * We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+   *
+   * @since 5.1.0
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   */
+  downloadFile(options: DownloadFileOptions): Promise<DownloadFileResult>;
+
+  /**
+   * Add a listener to file download progress events.
+   *
+   * This method has been deprecated since version 7.1.0.
+   * We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+   *
+   * @since 5.1.0
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   */
+  addListener(eventName: 'progress', listenerFunc: ProgressListener): Promise<PluginListenerHandle>;
+
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * This method has been deprecated since version 7.1.0.
+   * We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+   *
+   * @since 5.2.0
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**
