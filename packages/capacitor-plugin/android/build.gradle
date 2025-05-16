@@ -58,7 +58,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // TODO replace with 1.0.0 once released
-    implementation "io.ionic.libs:ionfilesystem-android:0.0.1"
+    implementation "io.ionic.libs:ionfilesystem-android:0.0.2"
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
 
