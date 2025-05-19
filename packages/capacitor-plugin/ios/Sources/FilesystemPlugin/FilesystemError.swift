@@ -1,5 +1,6 @@
 enum IONFileMethod: String {
-    case read
+    case readFile
+    case readFileInChunks
     case writeFile
     case appendFile
     case deleteFile
@@ -14,11 +15,12 @@ enum IONFileMethod: String {
 
 enum FilesystemError: Error {
     case bridgeNotInitialised
-    case invalidDataEncodingCombination(method: IONFileMethod)
-    case invalidPathParameter
+    case invalidInput(method: IONFileMethod)
     case invalidPath(_ path: String)
-    case invalidDataParameter
-    case bothPathsRequired
+    case fileNotFound(method: IONFileMethod, _ path: String)
+    case directoryAlreadyExists(_ path: String)
+    case parentDirectoryMissing
+    case cannotDeleteChildren
     case operationFailed(method: IONFileMethod, _ error: Error)
 
     func toCodeMessagePair() -> (code: String, message: String) {
@@ -29,25 +31,27 @@ enum FilesystemError: Error {
 private extension FilesystemError {
     var code: Int {
         switch self {
-        case .bridgeNotInitialised: 0
-        case .invalidDataEncodingCombination: 0
-        case .invalidPathParameter: 0
-        case .invalidPath: 0
-        case .invalidDataParameter: 0
-        case .bothPathsRequired: 0
-        case .operationFailed: 0
+        case .bridgeNotInitialised: 4
+        case .invalidInput: 5
+        case .invalidPath: 6
+        case .fileNotFound: 8
+        case .directoryAlreadyExists: 10
+        case .parentDirectoryMissing: 11
+        case .cannotDeleteChildren: 12
+        case .operationFailed: 13
         }
     }
 
     var description: String {
         switch self {
         case .bridgeNotInitialised: "Capacitor bridge isn't initialized."
-        case .invalidDataEncodingCombination(let method): "Can't decode the 'value' and 'encoding' combination for method '\(method.rawValue)'."
-        case .invalidPathParameter: "'path' must be provided and must be a string."
+        case .invalidInput(let method): "The '\(method.rawValue)' input parameters aren't valid."
         case .invalidPath(let path): "Invalid \(!path.isEmpty ? "'" + path + "' " : "")path."
-        case .invalidDataParameter: "'data' must be provided and must be a string."
-        case .bothPathsRequired: "Both 'to' and 'from' must be provided."
-        case .operationFailed(let method, let error): "'\(method.rawValue) failed: \(error.localizedDescription)."
+        case .fileNotFound(let method, let path): "'\(method.rawValue)' failed because file\(!path.isEmpty ? " at '" + path + "' " : "") does not exist."
+        case .directoryAlreadyExists(let path): "Directory\(!path.isEmpty ? " at '" + path + "' " : "") already exists, cannot be overwritten."
+        case .parentDirectoryMissing: "Missing parent directory - possibly recursive=false was passed or parent directory creation failed."
+        case .cannotDeleteChildren: "Cannot delete directory with children; received recursive=false but directory has contents."
+        case .operationFailed(let method, let error): "'\(method.rawValue)' failed with: \(error.localizedDescription)"
         }
     }
 }

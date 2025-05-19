@@ -14,6 +14,7 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "Filesystem"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "readFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "readFileInChunks", returnType: CAPPluginReturnCallback),
         CAPPluginMethod(name: "writeFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "appendFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteFile", returnType: CAPPluginReturnPromise),
@@ -28,10 +29,12 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
     ]
-    
+
+    private let legacyImplementation = LegacyFilesystemImplementation()
+
     private var fileService: FileService?
 
-    public override func load() {
+    override public func load() {
         self.fileService = IONFILEManager()
     }
 
@@ -40,11 +43,11 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         return fileService.map(Result.success) ?? .failure(.bridgeNotInitialised)
     }
 
-    override public func checkPermissions(_ call: CAPPluginCall) {
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
         call.handlePermissionSuccess()
     }
 
-    override public func requestPermissions(_ call: CAPPluginCall) {
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
         call.handlePermissionSuccess()
     }
 }
@@ -57,7 +60,17 @@ private extension FilesystemPlugin {
     @objc func readFile(_ call: CAPPluginCall) {
         let encoding = call.getEncoding(Constants.MethodParameter.encoding)
         performSinglePathOperation(call) {
-            .read(url: $0, encoding: encoding)
+            .readFile(url: $0, encoding: encoding)
+        }
+    }
+
+    @objc func readFileInChunks(_ call: CAPPluginCall) {
+        let encoding = call.getEncoding(Constants.MethodParameter.encoding)
+        guard let chunkSize = call.getInt(Constants.MethodParameter.chunkSize) else {
+            return call.handleError(.invalidInput(method: call.getIONFileMethod()))
+        }
+        performSinglePathOperation(call) {
+            .readFileInChunks(url: $0, encoding: encoding, chunkSize: chunkSize)
         }
     }
 
@@ -65,11 +78,8 @@ private extension FilesystemPlugin {
      * Write a file to the filesystem.
      */
     @objc func writeFile(_ call: CAPPluginCall) {
-        guard let data = call.getString(Constants.MethodParameter.data) else {
-            return call.handleError(.invalidDataParameter)
-        }
-        guard let encodingMapper = call.getEncodingMapper(usingValue: data) else {
-            return call.handleError(.invalidDataEncodingCombination(method: .writeFile))
+        guard let encodingMapper = call.getEncodingMapper() else {
+            return call.handleError(.invalidInput(method: call.getIONFileMethod()))
         }
         let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
@@ -82,11 +92,8 @@ private extension FilesystemPlugin {
      * Append to a file.
      */
     @objc func appendFile(_ call: CAPPluginCall) {
-        guard let data = call.getString(Constants.MethodParameter.data) else {
-            return call.handleError(.invalidDataParameter)
-        }
-        guard let encodingMapper = call.getEncodingMapper(usingValue: data) else {
-            return call.handleError(.invalidDataEncodingCombination(method: .appendFile))
+        guard let encodingMapper = call.getEncodingMapper() else {
+            return call.handleError(.invalidInput(method: call.getIONFileMethod()))
         }
         let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
@@ -111,7 +118,7 @@ private extension FilesystemPlugin {
         let recursive = call.getBool(Constants.MethodParameter.recursive, false)
 
         performSinglePathOperation(call) {
-            .mkdir(url: $0,recursive: recursive)
+            .mkdir(url: $0, recursive: recursive)
         }
     }
 
@@ -165,21 +172,25 @@ private extension FilesystemPlugin {
         }
     }
 
+    /**
+     * [DEPRECATED] Download a file
+     */
+    @available(*, deprecated, message: "Use @capacitor/file-transfer plugin instead.")
     @objc func downloadFile(_ call: CAPPluginCall) {
-        //        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
-        //        let progressEmitter: Filesystem.ProgressEmitter = { bytes, contentLength in
-        //            self.notifyListeners("progress", data: [
-        //                "url": url,
-        //                "bytes": bytes,
-        //                "contentLength": contentLength
-        //            ])
-        //        }
-        //
-        //        do {
-        //            try implementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
-        //        } catch let error {
-        //            call.reject(error.localizedDescription)
-        //        }
+        guard let url = call.getString("url") else { return call.reject("Must provide a URL") }
+        let progressEmitter: LegacyFilesystemImplementation.ProgressEmitter = { bytes, contentLength in
+            self.notifyListeners("progress", data: [
+                "url": url,
+                "bytes": bytes,
+                "contentLength": contentLength
+            ])
+        }
+
+        do {
+            try legacyImplementation.downloadFile(call: call, emitter: progressEmitter, config: bridge?.config)
+        } catch let error {
+            call.reject(error.localizedDescription)
+        }
     }
 }
 

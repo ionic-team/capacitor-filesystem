@@ -1,4 +1,6 @@
-import type { PermissionState } from '@capacitor/core';
+import type { HttpOptions, PermissionState, PluginListenerHandle } from '@capacitor/core';
+
+export type CallbackID = string;
 
 export interface PermissionStatus {
   publicStorage: PermissionState;
@@ -10,7 +12,7 @@ export enum Directory {
    * On iOS it's the app's documents directory.
    * Use this directory to store user-generated content.
    * On Android it's the Public Documents folder, so it's accessible from other apps.
-   * It's not accesible on Android 10 unless the app enables legacy External Storage
+   * It's not accessible on Android 10 unless the app enables legacy External Storage
    * by adding `android:requestLegacyExternalStorage="true"` in the `application` tag
    * in the `AndroidManifest.xml`.
    * On Android 11 or newer the app can only access the files/folders the app created.
@@ -65,41 +67,35 @@ export enum Directory {
    * The external storage directory.
    * On iOS it will use the Documents directory.
    * On Android it's the primary shared/external storage directory.
-   * It's not accesible on Android 10 unless the app enables legacy External Storage
+   * It's not accessible on Android 10 unless the app enables legacy External Storage
    * by adding `android:requestLegacyExternalStorage="true"` in the `application` tag
    * in the `AndroidManifest.xml`.
-   * It's not accesible on Android 11 or newer.
+   * It's not accessible on Android 11 or newer.
    *
    * @since 1.0.0
    */
-  ExternalStorage = 'EXTERNAL_STORAGE',
 
+  ExternalStorage = 'EXTERNAL_STORAGE',
   /**
    * The external cache directory.
-   * Android ONly
+   * On iOS it will use the Documents directory.
    * On Android it's the primary shared/external cache.
-   * It's not accesible on Android 10 unless the app enables legacy External Storage
-   * by adding `android:requestLegacyExternalStorage="true"` in the `application` tag
-   * in the `AndroidManifest.xml`.
-   * It's not accesible on Android 11 or newer.
    *
    * @since 7.1.0
    */
   ExternalCache = 'EXTERNAL_CACHE',
 
   /**
-   * iOS only
-   * It maps to Library/NoCloud directory
-   * Files will be deleted when the application is uninstalled.
+   * The Library directory without cloud backup. Used in iOS.
+   * On Android it's the directory holding application files.
    *
    * @since 7.1.0
    */
   LibraryNoCloud = 'LIBRARY_NO_CLOUD',
 
   /**
-   * iOS only
-   * The tmp/ directory.
-   * Files will be deleted when the application is uninstalled.
+   * A temporary directory for iOS.
+   * On Android it's the directory holding the application cache.
    *
    * @since 7.1.0
    */
@@ -483,6 +479,89 @@ export interface CopyResult {
   uri: string;
 }
 
+export interface DownloadFileOptions extends HttpOptions {
+  /**
+   * The path the downloaded file should be moved to.
+   *
+   * @since 5.1.0
+   */
+  path: string;
+  /**
+   * The directory to write the file to.
+   * If this option is used, filePath can be a relative path rather than absolute.
+   * The default is the `DATA` directory.
+   *
+   * @since 5.1.0
+   */
+  directory?: Directory;
+  /**
+   * An optional listener function to receive downloaded progress events.
+   * If this option is used, progress event should be dispatched on every chunk received.
+   * Chunks are throttled to every 100ms on Android/iOS to avoid slowdowns.
+   *
+   * @since 5.1.0
+   */
+  progress?: boolean;
+  /**
+   * Whether to create any missing parent directories.
+   *
+   * @default false
+   * @since 5.1.2
+   */
+  recursive?: boolean;
+}
+
+export interface DownloadFileResult {
+  /**
+   * The path the file was downloaded to.
+   *
+   * @since 5.1.0
+   */
+  path?: string;
+  /**
+   * The blob data of the downloaded file.
+   * This is only available on web.
+   *
+   * @since 5.1.0
+   */
+  blob?: Blob;
+}
+
+export interface ProgressStatus {
+  /**
+   * The url of the file being downloaded.
+   *
+   * @since 5.1.0
+   */
+  url: string;
+  /**
+   * The number of bytes downloaded so far.
+   *
+   * @since 5.1.0
+   */
+  bytes: number;
+  /**
+   * The total number of bytes to download for this file.
+   *
+   * @since 5.1.0
+   */
+  contentLength: number;
+}
+
+/**
+ * Callback for receiving chunks read from a file, or error if something went wrong.
+ *
+ * @since 7.1.0
+ */
+export type ReadFileInChunksCallback = (chunkRead: ReadFileResult | null, err?: any) => void;
+
+/**
+ * A listener function that receives progress events.
+ *
+ * @since 5.1.0
+ */
+export type ProgressListener = (progress: ProgressStatus) => void;
+
 export interface FilesystemPlugin {
   /**
    * Check read/write permissions.
@@ -510,12 +589,14 @@ export interface FilesystemPlugin {
   readFile(options: ReadFileOptions): Promise<ReadFileResult>;
 
   /**
-   * Read a file from disk, in chunks
-   * Native only (not available in web)
+   * Read a file from disk, in chunks.
+   * Native only (not available in web).
+   * Use the callback to receive each read chunk.
+   * If empty chunk is returned, it means file has been completely read.
    *
    * @since 7.1.0
    */
-  readFileInChunks(options: ReadFileInChunksOptions): Promise<ReadFileResult>;
+  readFileInChunks(options: ReadFileInChunksOptions, callback: ReadFileInChunksCallback): Promise<CallbackID>;
 
   /**
    * Write a file to disk in the specified location on device
@@ -586,9 +667,97 @@ export interface FilesystemPlugin {
    * @since 1.0.0
    */
   copy(options: CopyOptions): Promise<CopyResult>;
+
+  /**
+   * Perform a http request to a server and download the file to the specified destination.
+   *
+   * This method has been deprecated since version 7.1.0.
+   * We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+   *
+   * @since 5.1.0
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   */
+  downloadFile(options: DownloadFileOptions): Promise<DownloadFileResult>;
+
+  /**
+   * Add a listener to file download progress events.
+   *
+   * This method has been deprecated since version 7.1.0.
+   * We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+   *
+   * @since 5.1.0
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   */
+  addListener(eventName: 'progress', listenerFunc: ProgressListener): Promise<PluginListenerHandle>;
+
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * This method has been deprecated since version 7.1.0.
+   * We recommend using the @capacitor/file-transfer plugin instead, in conjunction with this plugin.
+   *
+   * @since 5.2.0
+   * @deprecated Use the @capacitor/file-transfer plugin instead.
+   */
+  removeAllListeners(): Promise<void>;
 }
 
+/**
+ * Structure for errors returned by the plugin.
+ *
+ * `code` follows "OS-PLUG-FILE-XXXX" format
+ *
+ * @since 1.0.0
+ */
 export type PluginError = {
   code: string;
   message: string;
 };
+
+/**
+ * @deprecated Use `ReadFileOptions`.
+ * @since 1.0.0
+ */
+export type FileReadOptions = ReadFileOptions;
+
+/**
+ * @deprecated Use `ReadFileResult`.
+ * @since 1.0.0
+ */
+export type FileReadResult = ReadFileResult;
+
+/**
+ * @deprecated Use `WriteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileWriteOptions = WriteFileOptions;
+
+/**
+ * @deprecated Use `WriteFileResult`.
+ * @since 1.0.0
+ */
+export type FileWriteResult = WriteFileResult;
+
+/**
+ * @deprecated Use `AppendFileOptions`.
+ * @since 1.0.0
+ */
+export type FileAppendOptions = AppendFileOptions;
+
+/**
+ * @deprecated Use `DeleteFileOptions`.
+ * @since 1.0.0
+ */
+export type FileDeleteOptions = DeleteFileOptions;
+
+/**
+ * @deprecated Use `Directory`.
+ * @since 1.0.0
+ */
+export const FilesystemDirectory = Directory;
+
+/**
+ * @deprecated Use `Encoding`.
+ * @since 1.0.0
+ */
+export const FilesystemEncoding = Encoding;
