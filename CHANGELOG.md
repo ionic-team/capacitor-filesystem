@@ -3,7 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# 7.1.0.dev.1 (unifying file)
+# 7.1.0.dev.1
+
+### Deprecations
+
+- `downloadFile`, `addListener`, `removeAllListeners` have now been marked deprecated; we recommend using the new [@capacitor/file-transfer plugin](https://github.com/ionic-team/capacitor-file-transfer).
 
 ### Features
 
@@ -17,6 +21,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Fixes
 
 - **android**: Permission checking for `file://` Uri's.
+- Adding trailing slash '/' to the end of directory paths returned by `getUri`.
 
 # [7.0.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/filesystem@7.0.0-rc.0...@capacitor/filesystem@7.0.0) (2025-01-20)
 
