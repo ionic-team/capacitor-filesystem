@@ -60,7 +60,7 @@ extension CAPPluginCall {
     private func getSearchPath(
         _ key: String, withDefaultSearchPath defaultSearchPath: IONFILESearchPath, andDefaultDirectoryType defaultDirectoryType: IONFILEDirectoryType? = nil
     ) -> IONFILESearchPath {
-        guard let directoryParameter = getString(key) else {
+        guard let directoryParameter = getString(key), directoryParameter.isEmpty == false else {
             return defaultSearchPath
         }
 
