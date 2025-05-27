@@ -1,0 +1,47 @@
+PODS:
+  - Capacitor (7.0.0):
+    - CapacitorCordova
+  - CapacitorCamera (7.0.0):
+    - Capacitor
+  - CapacitorCordova (7.0.0)
+  - CapacitorFilesystem (7.0.0):
+    - Capacitor
+    - IONFilesystemLib (~> 1.0)
+  - CapacitorSplashScreen (7.0.0):
+    - Capacitor
+  - IONFilesystemLib (1.0.0)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios`)"
+  - "CapacitorCamera (from `../../../../node_modules/.pnpm/@capacitor+camera@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/camera`)"
+  - "CapacitorCordova (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios`)"
+  - "CapacitorFilesystem (from `../../../../node_modules/.pnpm/@capacitor+filesystem@file+packages+capacitor-plugin_@capacitor+core@7.0.0/node_modules/@capacitor/filesystem`)"
+  - "CapacitorSplashScreen (from `../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/splash-screen`)"
+
+SPEC REPOS:
+  trunk:
+    - IONFilesystemLib
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios"
+  CapacitorCamera:
+    :path: "../../../../node_modules/.pnpm/@capacitor+camera@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/camera"
+  CapacitorCordova:
+    :path: "../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios"
+  CapacitorFilesystem:
+    :path: "../../../../node_modules/.pnpm/@capacitor+filesystem@file+packages+capacitor-plugin_@capacitor+core@7.0.0/node_modules/@capacitor/filesystem"
+  CapacitorSplashScreen:
+    :path: "../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/splash-screen"
+
+SPEC CHECKSUMS:
+  Capacitor: fcbee427ff437f414bbb3bc2d39364ad9bd2b8a5
+  CapacitorCamera: 777ddf61d727754fcda0b92303ae09ea3765d7b7
+  CapacitorCordova: 345f93b7edd121db98e4ec20ac94d6d7bcaf7e48
+  CapacitorFilesystem: ffc84ae6ad9318284576acbbd512f83d1e89556b
+  CapacitorSplashScreen: f4e58cc02aafd91c7cbaf32a3d1b44d02a115125
+  IONFilesystemLib: ceacae793975039530458eabab0c495c70515a0d
+
+PODFILE CHECKSUM: 57ff2f3f788c053bccb9ff1b6e7abe4817322e3f
+
+COCOAPODS: 1.16.2
