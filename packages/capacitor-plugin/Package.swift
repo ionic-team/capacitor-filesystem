@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "FilesystemCapacitor",
+    name: "CapacitorFilesystem",
     platforms: [.iOS(.v14)],
     products: [
         .library(
-            name: "FilesystemCapacitor",
+            name: "CapacitorFilesystem",
             targets: ["FilesystemPlugin"])
     ],
     dependencies: [
