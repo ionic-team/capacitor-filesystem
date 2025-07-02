@@ -5,7 +5,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [7.1.2](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.1...v7.1.2)  (2025-06-30)
 
-- Set dependency on @capacitor/synapse to 1.0.3 to fix ssr environments
+- Set dependency on @capacitor/synapse to 1.0.3 to fix ssr environments. More info [here](https://github.com/ionic-team/capacitor-filesystem/issues/11).
 
 # [7.1.1](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.0...v7.1.1)  (2025-05-27)
 
