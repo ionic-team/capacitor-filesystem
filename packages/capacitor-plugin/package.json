@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/filesystem",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "description": "The Filesystem API provides a NodeJS-like API for working with files on the device.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -46,7 +46,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@capacitor/synapse": "^1.0.1"
+    "@capacitor/synapse": "^1.0.3"
   },
   "devDependencies": {
     "@capacitor/android": "7.0.1",
