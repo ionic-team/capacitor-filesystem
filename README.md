@@ -194,4 +194,4 @@ const readFilePath = async () => {
 
 ## API
 
-Check the plugin's api [here]("packages/capacitor-plugin/README.md)
+Check the plugin's api [here](packages/capacitor-plugin/README.md)
