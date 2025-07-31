@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "IONFilesystemLib",
-            url: "https://github.com/ionic-team/ion-ios-filesystem/releases/download/1.0.0/IONFilesystemLib.zip",
-            checksum: "0279cb09ba79c2c917b049a6e388f37f025846886ecc86b0a09320da46ed2c33" // sha-256
+            url: "https://github.com/ionic-team/ion-ios-filesystem/releases/download/1.0.1/IONFilesystemLib.zip",
+            checksum: "2d333c2be44a51f804f3b592d61fa19d582afc40b6916c1c9d1dee43c30657b9" // sha-256
         ),
         .target(
             name: "FilesystemPlugin",
