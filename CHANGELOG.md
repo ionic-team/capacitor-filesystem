@@ -1,25 +1,20 @@
-# Change Log
-
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
-
-# [7.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.3...v7.1.4)  (2025-08-01)
+## [7.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.3...v7.1.4)  (2025-08-01)
 
 ### Fixes
 
 - **ios** Do not add trailing slash to files ([#20](https://github.com/ionic-team/capacitor-filesystem/pull/20))
 
-# [7.1.3](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.2...v7.1.3)  (2025-07-25)
+## [7.1.3](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.2...v7.1.3)  (2025-07-25)
 
 ### Fixes
 
 - **ios** fix SPM package name not matching CLI CapApp-SPM generated name ([#16](https://github.com/ionic-team/capacitor-filesystem/pull/16))
 
-# [7.1.2](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.1...v7.1.2)  (2025-06-30)
+## [7.1.2](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.1...v7.1.2)  (2025-06-30)
 
 - Set dependency on @capacitor/synapse to 1.0.3 to fix ssr environments. More info [here](https://github.com/ionic-team/capacitor-filesystem/issues/11).
 
-# [7.1.1](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.0...v7.1.1)  (2025-05-27)
+## [7.1.1](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.0...v7.1.1)  (2025-05-27)
 
 - Added missing documentation on using `@capacitor/file-transfer` plugin.
 
