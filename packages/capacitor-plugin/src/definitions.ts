@@ -385,6 +385,30 @@ export interface CopyOptions {
 
 export type RenameOptions = CopyOptions;
 
+export interface ExcludeFromBackupOptions {
+  /**
+   * The path of the file or directory to exclude from backup
+   *
+   * @since 7.2.0
+   */
+  path: string;
+
+  /**
+   * The `Directory` to exclude the file or directory from
+   *
+   * @since 7.2.0
+   */
+  directory?: Directory;
+
+  /**
+   * Whether to exclude the file or directory from backup
+   *
+   * @default false
+   * @since 7.2.0
+   */
+  excluded: boolean;
+}
+
 export interface ReadFileResult {
   /**
    * The representation of the data contained in the file
@@ -667,6 +691,13 @@ export interface FilesystemPlugin {
    * @since 1.0.0
    */
   copy(options: CopyOptions): Promise<CopyResult>;
+
+  /**
+   * Exclude a file or directory from backup (iOS only).
+   *
+   * @since 7.2.0
+   */
+  excludeFromBackup(options: ExcludeFromBackupOptions): Promise<void>;
 
   /**
    * Perform a http request to a server and download the file to the specified destination.
