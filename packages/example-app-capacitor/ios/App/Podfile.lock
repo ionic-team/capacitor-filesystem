@@ -1,22 +1,22 @@
 PODS:
-  - Capacitor (7.0.0):
+  - Capacitor (8.0.0-alpha.2):
     - CapacitorCordova
-  - CapacitorCamera (7.0.0):
+  - CapacitorCamera (8.0.0-alpha.1):
     - Capacitor
-  - CapacitorCordova (7.0.0)
+  - CapacitorCordova (8.0.0-alpha.2)
   - CapacitorFilesystem (7.1.4):
     - Capacitor
     - IONFilesystemLib (~> 1.0.1)
-  - CapacitorSplashScreen (7.0.0):
+  - CapacitorSplashScreen (8.0.0-alpha.1):
     - Capacitor
   - IONFilesystemLib (1.0.1)
 
 DEPENDENCIES:
-  - "Capacitor (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios`)"
-  - "CapacitorCamera (from `../../../../node_modules/.pnpm/@capacitor+camera@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/camera`)"
-  - "CapacitorCordova (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios`)"
-  - "CapacitorFilesystem (from `../../../../node_modules/.pnpm/@capacitor+filesystem@file+packages+capacitor-plugin_@capacitor+core@7.0.0/node_modules/@capacitor/filesystem`)"
-  - "CapacitorSplashScreen (from `../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/splash-screen`)"
+  - "Capacitor (from `../../../../node_modules/.pnpm/@capacitor+ios@8.0.0-alpha.2_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/ios`)"
+  - "CapacitorCamera (from `../../../../node_modules/.pnpm/@capacitor+camera@8.0.0-alpha.1_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/camera`)"
+  - "CapacitorCordova (from `../../../../node_modules/.pnpm/@capacitor+ios@8.0.0-alpha.2_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/ios`)"
+  - CapacitorFilesystem (from `../../../capacitor-plugin`)
+  - "CapacitorSplashScreen (from `../../../../node_modules/.pnpm/@capacitor+splash-screen@8.0.0-alpha.1_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/splash-screen`)"
 
 SPEC REPOS:
   trunk:
@@ -24,24 +24,24 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Capacitor:
-    :path: "../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios"
+    :path: "../../../../node_modules/.pnpm/@capacitor+ios@8.0.0-alpha.2_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/ios"
   CapacitorCamera:
-    :path: "../../../../node_modules/.pnpm/@capacitor+camera@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/camera"
+    :path: "../../../../node_modules/.pnpm/@capacitor+camera@8.0.0-alpha.1_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/camera"
   CapacitorCordova:
-    :path: "../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios"
+    :path: "../../../../node_modules/.pnpm/@capacitor+ios@8.0.0-alpha.2_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/ios"
   CapacitorFilesystem:
-    :path: "../../../../node_modules/.pnpm/@capacitor+filesystem@file+packages+capacitor-plugin_@capacitor+core@7.0.0/node_modules/@capacitor/filesystem"
+    :path: "../../../capacitor-plugin"
   CapacitorSplashScreen:
-    :path: "../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/splash-screen"
+    :path: "../../../../node_modules/.pnpm/@capacitor+splash-screen@8.0.0-alpha.1_@capacitor+core@8.0.0-alpha.2/node_modules/@capacitor/splash-screen"
 
 SPEC CHECKSUMS:
-  Capacitor: fcbee427ff437f414bbb3bc2d39364ad9bd2b8a5
-  CapacitorCamera: 777ddf61d727754fcda0b92303ae09ea3765d7b7
-  CapacitorCordova: 345f93b7edd121db98e4ec20ac94d6d7bcaf7e48
-  CapacitorFilesystem: ac0a386949ed6c295a3dffa129ecd26b881ae5be
-  CapacitorSplashScreen: f4e58cc02aafd91c7cbaf32a3d1b44d02a115125
+  Capacitor: f88db94b173c6d2c97003248197f749674d42dc8
+  CapacitorCamera: f072b76519f1a5981becb6caa3ab10c79622ae66
+  CapacitorCordova: 9b60d7dd7f5035cefe9b5f7f3edf11ccd93b6ae6
+  CapacitorFilesystem: 99d152a629ea797014360bd221e37299468d9b61
+  CapacitorSplashScreen: 6a9a07f9b1313faad49dde7bb8f12b7c4fcc3acf
   IONFilesystemLib: 89258b8e3e85465da93127d25d7ce37f977e8a6f
 
-PODFILE CHECKSUM: 57ff2f3f788c053bccb9ff1b6e7abe4817322e3f
+PODFILE CHECKSUM: 8422d3a31c33ffabd690271888e4dffe48a1150c
 
 COCOAPODS: 1.16.2
