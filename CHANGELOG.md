@@ -1,3 +1,20 @@
+# [8.0.0-next.1](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.4...v8.0.0-next.1) (2025-09-09)
+
+
+### Bug Fixes
+
+* Cap8 peerDependency for pnpm compatibility ([99e4fe8](https://github.com/ionic-team/capacitor-filesystem/commit/99e4fe857abc5c2d8547b500c2f9e958505f148a))
+
+
+### Features
+
+* Capacitor 8 support ([19f1518](https://github.com/ionic-team/capacitor-filesystem/commit/19f151832dd6b8b65d78bea2a1a49f350d86dd87))
+
+
+### BREAKING CHANGES
+
+* Capacitor major version update requires major version update on the plugin.
+
 ## [7.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.3...v7.1.4)  (2025-08-01)
 
 ### Fixes
