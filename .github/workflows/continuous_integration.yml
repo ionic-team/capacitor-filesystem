@@ -27,6 +27,11 @@ jobs:
       - name: 'Verify Android'
         working-directory: ./packages/capacitor-plugin
         run: npm run verify:android
+      - name: 'Prepare example app'
+        uses: ./.github/actions/prepare-example-app
+      - name: 'Build Android example app'
+        working-directory: ./packages/example-app-capacitor/android
+        run: ./gradlew clean assembleDebug
 
   verify-plugin-ios:
     needs: ['setup', 'lint', 'build']
@@ -39,29 +44,6 @@ jobs:
       - name: 'Verify iOS'
         working-directory: ./packages/capacitor-plugin
         run: npm run verify:ios
-
-  build-example-app-android:
-    needs: ['verify-plugin-ios', 'verify-plugin-android']
-    runs-on: 'macos-15'
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'Setup Tools'
-        uses: ./.github/actions/setup-tools
-      - name: 'Prepare example app'
-        uses: ./.github/actions/prepare-example-app
-      - name: 'Build Android example app'
-        working-directory: ./packages/example-app-capacitor/android
-        run: ./gradlew clean assembleDebug
-    
-  build-example-app-ios:
-    needs: ['verify-plugin-ios', 'verify-plugin-android']
-    runs-on: 'macos-15'
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'Setup Tools'
-        uses: ./.github/actions/setup-tools
       - name: 'Prepare example app'
         uses: ./.github/actions/prepare-example-app
       - name: 'Build iOS example app'
