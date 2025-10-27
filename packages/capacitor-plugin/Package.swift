@@ -10,20 +10,16 @@ let package = Package(
             targets: ["FilesystemPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0"),
+        .package(url: "https://github.com/ionic-team/ion-ios-filesystem.git", from: "1.0.1")
     ],
     targets: [
-        .binaryTarget(
-            name: "IONFilesystemLib",
-            url: "https://github.com/ionic-team/ion-ios-filesystem/releases/download/1.0.1/IONFilesystemLib.zip",
-            checksum: "2d333c2be44a51f804f3b592d61fa19d582afc40b6916c1c9d1dee43c30657b9" // sha-256
-        ),
         .target(
             name: "FilesystemPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
-                "IONFilesystemLib"
+                .product(name: "IONFilesystemLib", package: "ion-ios-filesystem")
             ],
             path: "ios/Sources/FilesystemPlugin"),
         .testTarget(
