@@ -25,6 +25,7 @@ public class FilesystemPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "stat", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "rename", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "copy", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "excludeFromBackup", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadFile", returnType: CAPPluginReturnPromise)
@@ -169,6 +170,16 @@ private extension FilesystemPlugin {
     @objc func copy(_ call: CAPPluginCall) {
         performDualPathOperation(call) {
             .copy(source: $0, destination: $1)
+        }
+    }
+
+    /**
+     * Excludes a file or directory from backup.
+     */
+    @objc func excludeFromBackup(_ call: CAPPluginCall) {
+        let excluded = call.getBool(Constants.MethodParameter.excluded, false)
+        performSinglePathOperation(call) {
+            .excludeFromBackup(url: $0, excluded: excluded)
         }
     }
 
