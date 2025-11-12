@@ -1,3 +1,10 @@
+# [8.0.0-next.3](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.2...v8.0.0-next.3) (2025-11-12)
+
+
+### Bug Fixes
+
+* **android:** use 'propName = value' assignment syntax in build.gradle files ([5dcd9c3](https://github.com/ionic-team/capacitor-filesystem/commit/5dcd9c3d744ca302fe2c4c8115269c109e2f75bf))
+
 # [8.0.0-next.2](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.1...v8.0.0-next.2) (2025-10-27)
 
 
