@@ -1,3 +1,7 @@
+# [8.0.0-next.4](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.3...v8.0.0-next.4) (2025-11-17)
+
+* **ios:** Minor updates to `Package.swift`.
+
 # [8.0.0-next.3](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.2...v8.0.0-next.3) (2025-11-12)
 
 
