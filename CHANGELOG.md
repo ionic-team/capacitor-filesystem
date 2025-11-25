@@ -1,3 +1,38 @@
+# [8.0.0-next.4](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.3...v8.0.0-next.4) (2025-11-17)
+
+* **ios:** Minor updates to `Package.swift`.
+
+# [8.0.0-next.3](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.2...v8.0.0-next.3) (2025-11-12)
+
+
+### Bug Fixes
+
+* **android:** use 'propName = value' assignment syntax in build.gradle files ([5dcd9c3](https://github.com/ionic-team/capacitor-filesystem/commit/5dcd9c3d744ca302fe2c4c8115269c109e2f75bf))
+
+# [8.0.0-next.2](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0-next.1...v8.0.0-next.2) (2025-10-27)
+
+
+### Bug Fixes
+
+* **ios:** Simplify SPM usage for native library ([#44](https://github.com/ionic-team/capacitor-filesystem/issues/44)) ([e590c3f](https://github.com/ionic-team/capacitor-filesystem/commit/e590c3f4542438ffa1e757835439d2457e1a79fc))
+
+# [8.0.0-next.1](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.4...v8.0.0-next.1) (2025-09-09)
+
+
+### Bug Fixes
+
+* Cap8 peerDependency for pnpm compatibility ([99e4fe8](https://github.com/ionic-team/capacitor-filesystem/commit/99e4fe857abc5c2d8547b500c2f9e958505f148a))
+
+
+### Features
+
+* Capacitor 8 support ([19f1518](https://github.com/ionic-team/capacitor-filesystem/commit/19f151832dd6b8b65d78bea2a1a49f350d86dd87))
+
+
+### BREAKING CHANGES
+
+* Capacitor major version update requires major version update on the plugin.
+
 ## [7.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.3...v7.1.4)  (2025-08-01)
 
 ### Fixes
