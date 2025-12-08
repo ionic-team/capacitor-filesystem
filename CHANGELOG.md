@@ -1,3 +1,21 @@
+# [8.0.0](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.5...v8.0.0) (2025-12-08)
+
+
+### Bug Fixes
+
+* **android:** use 'propName = value' assignment syntax in build.gradle files ([5dcd9c3](https://github.com/ionic-team/capacitor-filesystem/commit/5dcd9c3d744ca302fe2c4c8115269c109e2f75bf))
+* Cap8 peerDependency for pnpm compatibility ([99e4fe8](https://github.com/ionic-team/capacitor-filesystem/commit/99e4fe857abc5c2d8547b500c2f9e958505f148a))
+
+
+### Features
+
+* Capacitor 8 support ([19f1518](https://github.com/ionic-team/capacitor-filesystem/commit/19f151832dd6b8b65d78bea2a1a49f350d86dd87))
+
+
+### BREAKING CHANGES
+
+* Capacitor major version update requires major version update on the plugin.
+
 ## [7.1.5](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.4...v7.1.5) (2025-11-25)
 
 
