@@ -1,3 +1,10 @@
+## [7.1.6](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.5...v7.1.6) (2025-12-16)
+
+
+### Bug Fixes
+
+* use latest-7 for 7.x ([#54](https://github.com/ionic-team/capacitor-filesystem/issues/54)) ([703e864](https://github.com/ionic-team/capacitor-filesystem/commit/703e8646b0aa1f144defeea91051dde5318dc8a9))
+
 ## [7.1.5](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.4...v7.1.5) (2025-11-25)
 
 
