@@ -1,3 +1,10 @@
+## [7.1.5](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.4...v7.1.5) (2025-11-25)
+
+
+### Bug Fixes
+
+* **ios:** Simplify SPM usage for native library ([#44](https://github.com/ionic-team/capacitor-filesystem/issues/44)) ([e590c3f](https://github.com/ionic-team/capacitor-filesystem/commit/e590c3f4542438ffa1e757835439d2457e1a79fc))
+
 ## [7.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.3...v7.1.4)  (2025-08-01)
 
 ### Fixes
