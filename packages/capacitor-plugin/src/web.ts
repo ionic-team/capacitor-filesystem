@@ -27,6 +27,7 @@ import type {
   DownloadFileResult,
   ProgressStatus,
   ReadFileInChunksCallback,
+  ExcludeFromBackupOptions,
 } from './definitions';
 import { Encoding } from './definitions';
 
@@ -436,6 +437,15 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
    */
   async copy(options: CopyOptions): Promise<CopyResult> {
     return this._copy(options, false);
+  }
+
+  /**
+   * Exclude a file or directory from backup (iOS only).
+   * @param options the options for the exclude operation
+   * @return a promise that resolves with the exclude result
+   */
+  async excludeFromBackup(_: ExcludeFromBackupOptions): Promise<void> {
+    throw this.unavailable('Method not implemented.');
   }
 
   async requestPermissions(): Promise<PermissionStatus> {

@@ -21,4 +21,5 @@ enum FilesystemOperation {
     case delete(url: URL)
     case rename(source: URL, destination: URL)
     case copy(source: URL, destination: URL)
+    case excludeFromBackup(url: URL, excluded: Bool)
 }
