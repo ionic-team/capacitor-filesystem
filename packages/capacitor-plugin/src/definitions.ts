@@ -229,6 +229,27 @@ export interface ReadFileOptions {
    * @since 1.0.0
    */
   encoding?: Encoding;
+
+  /**
+   * The offset to start reading the file from, in bytes.
+   * Native only (not available in web).
+   * Can be used in conjunction with length to partially read files.
+   *
+   * @since 8.1.0
+   * @default 0
+   */
+  offset?: number;
+
+  /**
+   * The length of data to read, in bytes.
+   * Any non-positive value means to read to the end of the file.
+   * Native only (not available in web).
+   * Can be used in conjunction with offset to partially read files.
+   *
+   * @since 8.1.0
+   * @default -1
+   */
+  length?: number;
 }
 
 export interface ReadFileInChunksOptions extends ReadFileOptions {
