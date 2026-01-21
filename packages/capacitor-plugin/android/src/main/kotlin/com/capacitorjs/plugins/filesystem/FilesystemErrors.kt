@@ -97,5 +97,7 @@ fun Throwable.toFilesystemError(methodName: String): FilesystemErrors.ErrorInfo 
     is IONFILEExceptions.CopyRenameFailed.NoParentDirectory ->
         FilesystemErrors.missingParentDirectories
 
+    is IllegalArgumentException -> FilesystemErrors.invalidInputMethod(methodName)
+
     else -> FilesystemErrors.operationFailed(methodName, this.localizedMessage ?: "")
 }
