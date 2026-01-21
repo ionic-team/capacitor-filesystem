@@ -26,6 +26,8 @@ struct Constants {
         static let directory = "directory"
         static let encoding = "encoding"
         static let chunkSize = "chunkSize"
+        static let offset = "offset"
+        static let length = "length"
         static let from = "from"
         static let path = "path"
         static let recursive = "recursive"
