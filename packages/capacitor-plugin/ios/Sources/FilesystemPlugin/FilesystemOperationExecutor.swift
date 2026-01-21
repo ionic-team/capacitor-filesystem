@@ -56,7 +56,7 @@ class FilesystemOperationExecutor {
 }
 
 private extension FilesystemOperationExecutor {
-    func processFileInChunks(at url: URL, withEncoding encoding: IONFILEEncoding, chunkSize: Int, offset: Int, length:Int, for operation: FilesystemOperation, _ call: CAPPluginCall) throws {
+    func processFileInChunks(at url: URL, withEncoding encoding: IONFILEEncoding, chunkSize: Int, offset: Int, length: Int, for operation: FilesystemOperation, _ call: CAPPluginCall) throws {
         let chunkSizeToUse = chunkSizeToUse(basedOn: chunkSize, and: encoding)
         try service.readFileInChunks(atURL: url, withEncoding: encoding, andChunkSize: chunkSizeToUse, andOffset: offset, andLength: length)
             .sink(receiveCompletion: { completion in
