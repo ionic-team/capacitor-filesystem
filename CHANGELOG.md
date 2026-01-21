@@ -1,3 +1,13 @@
+# [8.1.0](https://github.com/ionic-team/capacitor-filesystem/compare/v8.0.0...v8.1.0) (2026-01-21)
+
+
+### Features
+
+* Allow reading parts of a file with `offset` and `length` ([#61](https://github.com/ionic-team/capacitor-filesystem/issues/61)) ([a765a78](https://github.com/ionic-team/capacitor-filesystem/commit/a765a78351864c9c05a21402cebe2ba7da5699a1))
+* **ci:** add Maven Central publishing workflow and Android publishing scripts ([#60](https://github.com/ionic-team/capacitor-filesystem/issues/60)) ([31b37c2](https://github.com/ionic-team/capacitor-filesystem/commit/31b37c2e33fc9469bc3e457776faa9e60c6394f3))
+* **ci:** add publish-pod job to invoke CocoaPods publish workflow ([#58](https://github.com/ionic-team/capacitor-filesystem/issues/58)) ([552acb6](https://github.com/ionic-team/capacitor-filesystem/commit/552acb67dc1bd253af83eee6445b5b25be91da06))
+* **ci:** add publish-pod job to invoke CocoaPods publish workflow ([#59](https://github.com/ionic-team/capacitor-filesystem/issues/59)) ([147764f](https://github.com/ionic-team/capacitor-filesystem/commit/147764fe98e0d5dc91c2a369fb1799d6a55b9869))
+
 # [8.0.0](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.5...v8.0.0) (2025-12-08)
 
 
