@@ -232,6 +232,7 @@ export interface ReadFileOptions {
   
   /**
    * The offset to start reading the file from, in bytes.
+   * Native only (not available in web).
    * Can be used in conjunction with length to partially read files.
    * 
    * @since 8.1.0
@@ -242,6 +243,7 @@ export interface ReadFileOptions {
   /**
    * The length of data to read, in bytes.
    * Any non-positive value means to read to the end of the file.
+   * Native only (not available in web).
    * Can be used in conjunction with offset to partially read files.
    * 
    * @since 8.1.0
