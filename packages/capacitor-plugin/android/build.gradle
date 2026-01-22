@@ -78,7 +78,6 @@ dependencies {
     }
 
     implementation "io.ionic.libs:ionfilesystem-android:1.1.0"
-    implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
