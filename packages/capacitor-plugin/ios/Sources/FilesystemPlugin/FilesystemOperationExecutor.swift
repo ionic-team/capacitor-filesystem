@@ -16,11 +16,11 @@ class FilesystemOperationExecutor {
             var resultData: PluginCallResultData?
 
             switch operation {
-            case .readFile(let url, let encoding):
-                let data = try service.readEntireFile(atURL: url, withEncoding: encoding).textValue
+            case .readFile(let url, let encoding, let offset, let length):
+                let data = try service.readEntireFile(atURL: url, withEncoding: encoding, andOffset: offset, andLength: length).textValue
                 resultData = [Constants.ResultDataKey.data: data]
-            case .readFileInChunks(let url, let encoding, let chunkSize):
-                try processFileInChunks(at: url, withEncoding: encoding, chunkSize: chunkSize, for: operation, call)
+            case .readFileInChunks(let url, let encoding, let chunkSize, let offset, let length):
+                try processFileInChunks(at: url, withEncoding: encoding, chunkSize: chunkSize, offset: offset, length: length, for: operation, call)
                 return
             case .write(let url, let encodingMapper, let recursive):
                 try service.saveFile(atURL: url, withEncodingAndData: encodingMapper, includeIntermediateDirectories: recursive)
@@ -56,9 +56,9 @@ class FilesystemOperationExecutor {
 }
 
 private extension FilesystemOperationExecutor {
-    func processFileInChunks(at url: URL, withEncoding encoding: IONFILEEncoding, chunkSize: Int, for operation: FilesystemOperation, _ call: CAPPluginCall) throws {
+    func processFileInChunks(at url: URL, withEncoding encoding: IONFILEEncoding, chunkSize: Int, offset: Int, length: Int, for operation: FilesystemOperation, _ call: CAPPluginCall) throws {
         let chunkSizeToUse = chunkSizeToUse(basedOn: chunkSize, and: encoding)
-        try service.readFileInChunks(atURL: url, withEncoding: encoding, andChunkSize: chunkSizeToUse)
+        try service.readFileInChunks(atURL: url, withEncoding: encoding, andChunkSize: chunkSizeToUse, andOffset: offset, andLength: length)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -82,8 +82,8 @@ private extension FilesystemOperationExecutor {
         var path = ""
         var method: IONFileMethod = IONFileMethod.getUri
         switch operation {
-        case .readFile(let url, _): path = url.absoluteString; method = .readFile
-        case .readFileInChunks(let url, _, _): path = url.absoluteString; method = .readFileInChunks
+        case .readFile(let url, _, _, _): path = url.absoluteString; method = .readFile
+        case .readFileInChunks(let url, _, _, _, _): path = url.absoluteString; method = .readFileInChunks
         case .write(let url, _, _): path = url.absoluteString; method = .writeFile
         case .append(let url, _, _): path = url.absoluteString; method = .appendFile
         case .delete(let url): path = url.absoluteString; method = .deleteFile

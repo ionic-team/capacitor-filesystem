@@ -3,8 +3,8 @@ import IONFilesystemLib
 
 enum FilesystemOperation {
     // Read Operations
-    case readFile(url: URL, encoding: IONFILEEncoding)
-    case readFileInChunks(url: URL, encoding: IONFILEEncoding, chunkSize: Int)
+    case readFile(url: URL, encoding: IONFILEEncoding, offset: Int, length: Int)
+    case readFileInChunks(url: URL, encoding: IONFILEEncoding, chunkSize: Int, offset: Int, length: Int)
     case readdir(url: URL)
     case stat(url: URL)
     case getUri(url: URL)

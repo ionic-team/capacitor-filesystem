@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   ]
   s.ios.deployment_target = '15.0'
   s.dependency 'Capacitor'
-  s.dependency 'IONFilesystemLib', spec='~> 1.0.1'
+  s.dependency 'IONFilesystemLib', spec='~> 1.1.0'
   s.swift_version = '5.1'
 end

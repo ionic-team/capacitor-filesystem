@@ -1,6 +1,7 @@
 package com.capacitorjs.plugins.filesystem
 
 import com.getcapacitor.PluginCall
+import io.ionic.libs.ionfilesystemlib.model.IONFILEConstants
 import io.ionic.libs.ionfilesystemlib.model.IONFILEEncoding
 import io.ionic.libs.ionfilesystemlib.model.IONFILEFolderType
 import io.ionic.libs.ionfilesystemlib.model.IONFILEReadInChunksOptions
@@ -13,6 +14,8 @@ internal const val INPUT_APPEND = "append"
 private const val INPUT_PATH = "path"
 private const val INPUT_DIRECTORY = "directory"
 private const val INPUT_ENCODING = "encoding"
+private const val INPUT_OFFSET = "offset"
+private const val INPUT_LENGTH = "length"
 private const val INPUT_CHUNK_SIZE = "chunkSize"
 private const val INPUT_DATA = "data"
 private const val INPUT_RECURSIVE = "recursive"
@@ -52,7 +55,15 @@ internal data class DoubleUri(
 internal fun PluginCall.getReadFileOptions(): ReadFileOptions? {
     val uri = getSingleIONFILEUri() ?: return null
     val encoding = IONFILEEncoding.fromEncodingName(getString(INPUT_ENCODING))
-    return ReadFileOptions(uri = uri, options = IONFILEReadOptions(encoding))
+    val offsetAndLength = getOffsetAndLength()
+    return ReadFileOptions(
+        uri = uri,
+        options = IONFILEReadOptions(
+            encoding,
+            offset = offsetAndLength.first,
+            length = offsetAndLength.second
+        )
+    )
 }
 
 /**
@@ -62,9 +73,15 @@ internal fun PluginCall.getReadFileInChunksOptions(): ReadFileInChunksOptions? {
     val uri = getSingleIONFILEUri() ?: return null
     val encoding = IONFILEEncoding.fromEncodingName(getString(INPUT_ENCODING))
     val chunkSize = getInt(INPUT_CHUNK_SIZE)?.takeIf { it > 0 } ?: return null
+    val offsetAndLength = getOffsetAndLength()
     return ReadFileInChunksOptions(
         uri = uri,
-        options = IONFILEReadInChunksOptions(encoding, chunkSize)
+        options = IONFILEReadInChunksOptions(
+            encoding,
+            chunkSize = chunkSize,
+            offset = offsetAndLength.first,
+            length = offsetAndLength.second
+        )
     )
 }
 
@@ -122,6 +139,11 @@ internal fun PluginCall.getSingleIONFILEUri(): IONFILEUri.Unresolved? {
     val directoryAlias = getString(INPUT_DIRECTORY)
     return unresolvedUri(path, directoryAlias)
 }
+
+private fun PluginCall.getOffsetAndLength(): Pair<Int, Int> = Pair(
+    getInt(INPUT_OFFSET)?.takeIf { it >= 0 } ?: 0,
+    getInt(INPUT_LENGTH)?.takeIf { it > 0 } ?: IONFILEConstants.LENGTH_READ_TIL_EOF
+)
 
 private fun unresolvedUri(path: String, directoryAlias: String?) = IONFILEUri.Unresolved(
     parentFolder = IONFILEFolderType.fromStringAlias(directoryAlias),

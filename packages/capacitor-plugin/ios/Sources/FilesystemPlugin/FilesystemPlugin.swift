@@ -59,8 +59,10 @@ private extension FilesystemPlugin {
      */
     @objc func readFile(_ call: CAPPluginCall) {
         let encoding = call.getEncoding(Constants.MethodParameter.encoding)
+        let offset = call.getInt(Constants.MethodParameter.offset) ?? 0
+        let length = call.getInt(Constants.MethodParameter.length) ?? -1
         performSinglePathOperation(call) {
-            .readFile(url: $0, encoding: encoding)
+            .readFile(url: $0, encoding: encoding, offset: offset, length: length)
         }
     }
 
@@ -69,8 +71,10 @@ private extension FilesystemPlugin {
         guard let chunkSize = call.getInt(Constants.MethodParameter.chunkSize) else {
             return call.handleError(.invalidInput(method: call.getIONFileMethod()))
         }
+        let offset = call.getInt(Constants.MethodParameter.offset) ?? 0
+        let length = call.getInt(Constants.MethodParameter.length) ?? -1
         performSinglePathOperation(call) {
-            .readFileInChunks(url: $0, encoding: encoding, chunkSize: chunkSize)
+            .readFileInChunks(url: $0, encoding: encoding, chunkSize: chunkSize, offset: offset, length: length)
         }
     }
 

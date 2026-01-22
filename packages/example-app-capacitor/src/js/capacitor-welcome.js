@@ -75,6 +75,8 @@ window.customElements.define(
         <br><br>
         <button id="fileRead" class="button">fileRead</button>
         <button id="fileReadInSmallChunks" class="button">fileReadInSmallChunks</button>
+        <button id="fileReadPartial" class="button">fileRead with offset and length</button>
+        <button id="fileReadInSmallChunksPartial" class="button">fileReadInSmallChunks with offset</button>
         <br><br>
         <button id="fileAppend" class="button">fileAppend</button>
         <br><br>
@@ -202,7 +204,35 @@ window.customElements.define(
             }
             console.log('chunk read', JSON.stringify(chunkResult))
           }
-      );
+        );
+      });
+      self.shadowRoot.querySelector('#fileReadPartial').addEventListener('click', async function (e) {
+        let contents = await Filesystem.readFile({
+          path: 'secrets/text.txt',
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+          offset: 4,
+          length: 5
+        });
+        console.log('file contents', contents.data);
+      });
+      self.shadowRoot.querySelector('#fileReadInSmallChunksPartial').addEventListener('click', async function (e) {
+        await Filesystem.readFileInChunks(
+          {
+            path: 'secrets/text.txt',
+            directory: Directory.Documents,
+            encoding: Encoding.UTF8,
+            chunkSize: 3, // on Android the chunk size to be used will be much larger
+            offset: 14
+          },
+          (chunkResult, err) => {
+            if (err) {
+              console.log(err)
+              return
+            }
+            console.log('chunk read', JSON.stringify(chunkResult))
+          }
+        );
       });
       self.shadowRoot.querySelector('#fileAppend').addEventListener('click', async function (e) {
         await Filesystem.appendFile({
