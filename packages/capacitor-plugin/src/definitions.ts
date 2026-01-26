@@ -155,8 +155,9 @@ export interface WriteFileOptions {
 
   /**
    * The encoding to write the file in.
-   * If not provided, binary data will be written. For this, you should provide data as base64 encoded,
+   * If not provided, binary data will be written. For this, you must provide data as base64 encoded,
    * so that the plugin can decode it before writing to disk.
+   * If you do not provide encoding and use non-base64 data, an error will be thrown.
    *
    * Pass Encoding.UTF8 to write data as string
    *
@@ -197,8 +198,9 @@ export interface AppendFileOptions {
 
   /**
    * The encoding to append to the file.
-   * If not provided, binary data will be appended. For this, you should provide data as base64 encoded,
+   * If not provided, binary data will be appended. For this, you must provide data as base64 encoded,
    * so that the plugin can decode it before writing to disk.
+   * If you do not provide encoding and use non-base64 data, an error will be thrown.
    *
    * Pass Encoding.UTF8 to write data as string
    *
