@@ -190,6 +190,16 @@ const readFilePath = async () => {
 
   console.log("data:", contents);
 };
+
+const appendBinaryData = async () => {
+  // Here's an example of appending binary data, which should be sent to the plugin
+  //  as base64 encoded, and without providing any `Encoding`
+  await Filesystem.appendFile({
+    path: "file.bin",
+    directory: Directory.Cache,
+    data: "VGhpcyBpcyBtZWFudCB0byByZXByZXNlbnQgYSBCaW5hcnkgRGF0YSBleGFtcGxlIGVuY29kZWQgaW4gQmFzZTY0Lg=="
+  });
+};
 ```
 
 ## API
