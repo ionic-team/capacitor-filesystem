@@ -201,6 +201,7 @@ const appendBinaryData = async () => {
 * [`stat(...)`](#stat)
 * [`rename(...)`](#rename)
 * [`copy(...)`](#copy)
+* [`excludeFromBackup(...)`](#excludefrombackup)
 * [`downloadFile(...)`](#downloadfile)
 * [`addListener('progress', ...)`](#addlistenerprogress-)
 * [`removeAllListeners()`](#removealllisteners)
@@ -471,6 +472,23 @@ Copy a file or directory
 --------------------
 
 
+### excludeFromBackup(...)
+
+```typescript
+excludeFromBackup(options: ExcludeFromBackupOptions) => Promise<void>
+```
+
+Exclude a file or directory from backup (iOS only).
+
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#excludefrombackupoptions">ExcludeFromBackupOptions</a></code> |
+
+**Since:** 7.2.0
+
+--------------------
+
+
 ### downloadFile(...)
 
 ```typescript
@@ -686,6 +704,15 @@ We recommend using the @capacitor/file-transfer plugin instead, in conjunction w
 | Prop      | Type                | Description                            | Since |
 | --------- | ------------------- | -------------------------------------- | ----- |
 | **`uri`** | <code>string</code> | The uri where the file was copied into | 4.0.0 |
+
+
+#### ExcludeFromBackupOptions
+
+| Prop            | Type                                            | Description                                                                    | Default            | Since |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
+| **`path`**      | <code>string</code>                             | The path of the file or directory to exclude from backup                       |                    | 7.2.0 |
+| **`directory`** | <code><a href="#directory">Directory</a></code> | The <a href="#directory">`Directory`</a> to exclude the file or directory from |                    | 7.2.0 |
+| **`excluded`**  | <code>boolean</code>                            | Whether to exclude the file or directory from backup                           | <code>false</code> | 7.2.0 |
 
 
 #### DownloadFileResult

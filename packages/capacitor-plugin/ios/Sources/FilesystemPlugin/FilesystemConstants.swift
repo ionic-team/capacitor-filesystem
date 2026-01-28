@@ -25,6 +25,7 @@ struct Constants {
         static let data = "data"
         static let directory = "directory"
         static let encoding = "encoding"
+        static let excluded = "excluded"
         static let chunkSize = "chunkSize"
         static let offset = "offset"
         static let length = "length"

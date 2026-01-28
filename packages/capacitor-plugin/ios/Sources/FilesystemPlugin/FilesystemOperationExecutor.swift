@@ -46,6 +46,10 @@ class FilesystemOperationExecutor {
             case .copy(let source, let destination):
                 try service.copyItem(fromURL: source, toURL: destination)
                 resultData = [Constants.ResultDataKey.uri: destination.absoluteString]
+            case .excludeFromBackup(var url, let excluded):
+                var values = URLResourceValues()
+                values.isExcludedFromBackup = excluded
+                try url.setResourceValues(values)
             }
 
             call.handleSuccess(resultData)
@@ -94,6 +98,7 @@ private extension FilesystemOperationExecutor {
         case .getUri(let url): return FilesystemError.invalidPath(url.absoluteString)
         case .rename(let sourceUrl, _): path = sourceUrl.absoluteString; method = .rename
         case .copy(let sourceUrl, _): path = sourceUrl.absoluteString; method = .copy
+        case .excludeFromBackup(let url, _): path = url.absoluteString; method = .excludeFromBackup
         }
 
         return mapError(error, withPath: path, andMethod: method)

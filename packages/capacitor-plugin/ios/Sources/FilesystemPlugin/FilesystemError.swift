@@ -11,6 +11,7 @@ enum IONFileMethod: String {
     case getUri
     case rename
     case copy
+    case excludeFromBackup
 }
 
 enum FilesystemError: Error {
