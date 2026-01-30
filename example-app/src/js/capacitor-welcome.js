@@ -125,9 +125,9 @@ window.customElements.define(
     connectedCallback() {
       const self = this;
 
-      self.shadowRoot.querySelector('#check-permission').addEventListener('click', async function (e) { 
+      self.shadowRoot.querySelector('#check-permission').addEventListener('click', async function (e) {
         let permissionStatus = await Filesystem.checkPermissions();
-        console.log(permissionStatus)
+        console.log(permissionStatus);
       });
       self.shadowRoot.querySelector('#request-permission').addEventListener('click', async function (e) {
         let permissionStatus = await Filesystem.requestPermissions();
@@ -199,11 +199,11 @@ window.customElements.define(
           },
           (chunkResult, err) => {
             if (err) {
-              console.log(err)
-              return
+              console.log(err);
+              return;
             }
-            console.log('chunk read', JSON.stringify(chunkResult))
-          }
+            console.log('chunk read', JSON.stringify(chunkResult));
+          },
         );
       });
       self.shadowRoot.querySelector('#fileReadPartial').addEventListener('click', async function (e) {
@@ -212,7 +212,7 @@ window.customElements.define(
           directory: Directory.Documents,
           encoding: Encoding.UTF8,
           offset: 4,
-          length: 5
+          length: 5,
         });
         console.log('file contents', contents.data);
       });
@@ -223,15 +223,15 @@ window.customElements.define(
             directory: Directory.Documents,
             encoding: Encoding.UTF8,
             chunkSize: 3, // on Android the chunk size to be used will be much larger
-            offset: 14
+            offset: 14,
           },
           (chunkResult, err) => {
             if (err) {
-              console.log(err)
-              return
+              console.log(err);
+              return;
             }
-            console.log('chunk read', JSON.stringify(chunkResult))
-          }
+            console.log('chunk read', JSON.stringify(chunkResult));
+          },
         );
       });
       self.shadowRoot.querySelector('#fileAppend').addEventListener('click', async function (e) {
@@ -464,11 +464,13 @@ window.customElements.define(
         await rmdirAll('da');
         console.log('copy finished');
       });
-      self.shadowRoot.querySelector("#downloadSmallFile").addEventListener('click', async function (e) {
+      self.shadowRoot.querySelector('#downloadSmallFile').addEventListener('click', async function (e) {
         download('https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf');
       });
-      self.shadowRoot.querySelector("#downloadLargeFile").addEventListener('click', async function (e) {
-        download('https://raw.githubusercontent.com/kyokidG/large-pdf-viewer-poc/58a3df6adc4fe9bd5f02d2f583d6747e187d93ae/public/test2.pdf');
+      self.shadowRoot.querySelector('#downloadLargeFile').addEventListener('click', async function (e) {
+        download(
+          'https://raw.githubusercontent.com/kyokidG/large-pdf-viewer-poc/58a3df6adc4fe9bd5f02d2f583d6747e187d93ae/public/test2.pdf',
+        );
       });
 
       // download a file from the provided url
@@ -476,25 +478,25 @@ window.customElements.define(
         try {
           const fileUrlSplit = file.split('/');
           const path = fileUrlSplit[fileUrlSplit.length - 1];
-    
+
           Filesystem.addListener('progress', (status) => {
             const progress = status.bytes / status.contentLength;
-            console.log("Download progress -> " + progress);
+            console.log('Download progress -> ' + progress);
           });
-    
+
           const downloadFileResult = await Filesystem.downloadFile({
             url: file,
             directory: Directory.Cache,
             path,
             progress: true,
           });
-    
+
           console.log('Downloaded file!', downloadFileResult);
           alert('Downloaded file successfully!');
         } catch (err) {
           console.error('Unable to download file', err);
         }
-      };
+      }
 
       // Helper function to run the provided promise-returning function on a single item or array of items
       async function doAll(item, callback) {
@@ -511,7 +513,7 @@ window.customElements.define(
             path: path,
             data: path,
             encoding: Encoding.UTF8,
-          })
+          }),
         );
       }
       // Delete many files
@@ -520,7 +522,7 @@ window.customElements.define(
           Filesystem.deleteFile({
             directory: Directory.Data,
             path: path,
-          })
+          }),
         );
       }
       // Create many directories
@@ -530,7 +532,7 @@ window.customElements.define(
             directory: Directory.Data,
             path: path,
             recursive: true,
-          })
+          }),
         );
       }
       // Remove many directories
@@ -539,11 +541,11 @@ window.customElements.define(
           Filesystem.rmdir({
             directory: Directory.Data,
             path: path,
-          })
+          }),
         );
       }
     }
-  }
+  },
 );
 
 window.customElements.define(
@@ -572,5 +574,5 @@ window.customElements.define(
     <slot></slot>
     `;
     }
-  }
+  },
 );

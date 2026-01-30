@@ -20,15 +20,12 @@ jobs:
         uses: ./.github/actions/setup-tools
 
       - name: "Copy README.md in root"
-        working-directory: ./packages/capacitor-plugin
         run: cp README.md README.md.original
 
       - name: "Build Packages"
-        working-directory: ./packages/capacitor-plugin
         run: npm run build
 
       - name: "Check README.md changes"
-        working-directory: ./packages/capacitor-plugin
         run: |
           if ! cmp --silent README.md README.md.original; then
             echo "Detected README.md changes; Do 'npm run build' to update the docs."

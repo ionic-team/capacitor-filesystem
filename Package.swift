@@ -21,10 +21,10 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "IONFilesystemLib", package: "ion-ios-filesystem")
             ],
-            path: "packages/capacitor-plugin/ios/Sources/FilesystemPlugin"),
+            path: "ios/Sources/FilesystemPlugin"),
         .testTarget(
             name: "FilesystemPluginTests",
             dependencies: ["FilesystemPlugin"],
-            path: "packages/capacitor-plugin/ios/Tests/FilesystemPluginTests")
+            path: "ios/Tests/FilesystemPluginTests")
     ]
 )
