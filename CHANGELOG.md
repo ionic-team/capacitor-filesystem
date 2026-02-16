@@ -1,3 +1,10 @@
+## [7.1.8](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.7...v7.1.8) (2026-02-16)
+
+
+### Bug Fixes
+
+* **ios:** bump IONFilesystemLib to 1.1.1 ([#69](https://github.com/ionic-team/capacitor-filesystem/issues/69)) ([d6f19c5](https://github.com/ionic-team/capacitor-filesystem/commit/d6f19c5c06908e451c5c5e0055d412b284d7fde9))
+
 ## [7.1.7](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.6...v7.1.7) (2026-02-12)
 
 
