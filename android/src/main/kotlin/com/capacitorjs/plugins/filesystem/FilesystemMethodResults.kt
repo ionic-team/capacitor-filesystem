@@ -38,7 +38,14 @@ fun createWriteResultObject(uri: Uri, mode: IONFILESaveMode): JSObject? =
  * @return a result [JSObject] for the list of a directories contents
  */
 fun createReadDirResultObject(list: List<IONFILEMetadataResult>): JSObject = JSObject().also {
-    it.put(OUTPUT_FILES, JSArray(list.map { child -> child.toResultObject() }))
+    val sorted = list.sortedWith(
+        compareBy<IONFILEMetadataResult>(
+            { it.lastModifiedTimestamp },
+            { it.createdTimestamp },
+            { it.name.lowercase() },
+        ),
+    )
+    it.put(OUTPUT_FILES, JSArray(sorted.map { child -> child.toResultObject() }))
 }
 
 /**
