@@ -3,14 +3,14 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorFilesystem",
-    platforms: [.iOS(.v15)],
+    platforms: [.iOS(.v16)],
     products: [
         .library(
             name: "CapacitorFilesystem",
             targets: ["FilesystemPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.5"),
         .package(url: "https://github.com/ionic-team/ion-ios-filesystem.git", from: "1.1.1")
     ],
     targets: [
