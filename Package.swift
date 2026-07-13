@@ -18,7 +18,6 @@ let package = Package(
             name: "FilesystemPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "IONFilesystemLib", package: "ion-ios-filesystem")
             ],
             path: "ios/Sources/FilesystemPlugin"),
