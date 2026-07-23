@@ -1,3 +1,15 @@
+# [8.2.0-next.2](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.1...v8.2.0-next.2) (2026-07-23)
+
+
+### chore
+
+* update capacitor core to alpha 6 ([36668cf](https://github.com/ionic-team/capacitor-filesystem/commit/36668cfd271dbea87d9705624d98102bb8c2168b))
+
+
+### BREAKING CHANGES
+
+* The real breaking change was eecd1f64daa9e3d5b25c89b4d2a602682e2bcbd5 but it was not picked up in the commit message
+
 # [8.2.0-next.1](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.3-next.1...v8.2.0-next.1) (2026-07-23)
 
 
