@@ -1,3 +1,10 @@
+# [8.2.0-next.1](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.3-next.1...v8.2.0-next.1) (2026-07-23)
+
+
+### Features
+
+* Align plugin baselines with core ([#81](https://github.com/ionic-team/capacitor-filesystem/issues/81)) ([eecd1f6](https://github.com/ionic-team/capacitor-filesystem/commit/eecd1f64daa9e3d5b25c89b4d2a602682e2bcbd5))
+
 ## [8.1.3-next.1](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.2...v8.1.3-next.1) (2026-07-23)
 
 ## [8.1.2](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.1...v8.1.2) (2026-02-13)
