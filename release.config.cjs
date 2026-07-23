@@ -6,7 +6,16 @@ module.exports = {
   ],
   repositoryUrl: 'https://github.com/ionic-team/capacitor-filesystem.git',
   plugins: [
-    '@semantic-release/commit-analyzer',
+     [
+      "@semantic-release/commit-analyzer",
+      {
+        // Default will be used if these don't match.
+        "releaseRules": [
+          { "type": "docs", "release": "patch" },
+          { "type": "chore", "release": "patch" },
+        ]
+      }
+    ],
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
     '@semantic-release/npm',
