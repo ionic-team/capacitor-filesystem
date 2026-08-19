@@ -1,3 +1,10 @@
+## [8.1.3](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.2...v8.1.3) (2026-08-19)
+
+
+### Bug Fixes
+
+* **android:** only apply kotlin-android plugin if not already applied ([#83](https://github.com/ionic-team/capacitor-filesystem/issues/83)) ([3de47a3](https://github.com/ionic-team/capacitor-filesystem/commit/3de47a3e606e48c2e849bab5287f6965992b8e42))
+
 ## [8.1.2](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.1...v8.1.2) (2026-02-13)
 
 
