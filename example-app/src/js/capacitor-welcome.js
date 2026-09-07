@@ -54,6 +54,36 @@ window.customElements.define(
       main pre {
         white-space: pre-line;
       }
+      .check-card {
+        border-left: 6px solid #999;
+        background: #f7f7f7;
+        padding: 10px 14px;
+        margin: 10px 0;
+        border-radius: 4px;
+      }
+      .check-escaped { border-left-color: #d63031; background: #fdecea; }
+      .check-contained { border-left-color: #2e9e4a; background: #eafaf0; }
+      .check-error { border-left-color: #e1a100; background: #fff8e1; }
+      .check-card-title { font-weight: bold; margin-bottom: 4px; }
+      .check-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 0.8em;
+        color: #fff;
+        background: #999;
+      }
+      .check-escaped .check-badge { background: #d63031; }
+      .check-contained .check-badge { background: #2e9e4a; }
+      .check-error .check-badge { background: #e1a100; }
+      .check-card-message { margin: 4px 0; }
+      .check-card-details {
+        background: #fff;
+        padding: 8px;
+        border-radius: 3px;
+        overflow-x: auto;
+        font-size: 0.85em;
+      }
     </style>
     <div>
       <capacitor-welcome-titlebar>
@@ -116,6 +146,31 @@ window.customElements.define(
         <br><br>
         <button id="downloadLargeFile" class="button">deprecated downloadFile (large)</button>
         <br><br>
+
+        <hr>
+        <h2>Directory containment checks</h2>
+        <p>
+          These checks confirm that a call scoped to one <code>Directory</code> only reads, writes,
+          copies, moves, or deletes data within that same <code>Directory</code>, using relative
+          <code>../</code> segments. Each check only touches canary files/folders it creates itself
+          and cleans them up afterwards.
+        </p>
+        <button id="checkTraversalRead" class="button">Check: traversal read (Data &rarr; Cache)</button>
+        <br><br>
+        <button id="checkTraversalDelete" class="button">Check: traversal recursive delete (Cache &rarr; Data)</button>
+        <br><br>
+        <button id="checkTraversalWrite" class="button">Check: traversal write (Data &rarr; Cache)</button>
+        <br><br>
+        <button id="checkCopyOverwrite" class="button">Check: copy overwrite via traversal (Data &rarr; Cache)</button>
+        <br><br>
+        <button id="checkMoveOverwrite" class="button">Check: move overwrite via traversal (Data &rarr; Cache)</button>
+        <br><br>
+        <button id="checkDirScopedListing" class="button">Check: directory-scoped traversal listing (Data + "..")</button>
+        <br><br>
+        <button id="runAllChecks" class="button">Run all checks</button>
+        <button id="clearResults" class="button">Clear results</button>
+        <br><br>
+        <div id="checkResults"></div>
         <br><br><br><br><br><br>
       </main>
     </div>
@@ -471,6 +526,403 @@ window.customElements.define(
         download(
           'https://raw.githubusercontent.com/kyokidG/large-pdf-viewer-poc/58a3df6adc4fe9bd5f02d2f583d6747e187d93ae/public/test2.pdf',
         );
+      });
+
+      // Render one check result card on screen (not just console output)
+      function renderCheckResult(title, status, message, details) {
+        const results = self.shadowRoot.querySelector('#checkResults');
+        const card = document.createElement('div');
+        card.className = 'check-card check-' + status;
+        card.innerHTML = `
+          <div class="check-card-title">${title} &mdash; <span class="check-badge">${status.toUpperCase()}</span></div>
+          <div class="check-card-message">${message}</div>
+          ${details ? `<pre class="check-card-details">${details}</pre>` : ''}
+        `;
+        results.prepend(card);
+      }
+
+      // Compute the relative "../.." path needed to walk from fromDirUri to toUri,
+      // without hardcoding platform-specific folder names (Android/iOS differ).
+      function relativeTraversalPath(fromDirUri, toUri) {
+        const fromParts = fromDirUri
+          .replace(/^file:\/\//, '')
+          .replace(/\/+$/, '')
+          .split('/')
+          .filter(Boolean);
+        const toParts = toUri
+          .replace(/^file:\/\//, '')
+          .split('/')
+          .filter(Boolean);
+        let common = 0;
+        while (common < fromParts.length && common < toParts.length && fromParts[common] === toParts[common]) {
+          common++;
+        }
+        const upCount = fromParts.length - common;
+        const downParts = toParts.slice(common);
+        return '../'.repeat(upCount) + downParts.join('/');
+      }
+
+      // Check 1: a call scoped to Directory.Data reads a file that was written to Directory.Cache
+      async function checkTraversalRead() {
+        const canaryName = 'traversal-canary.txt';
+        const marker = 'canary-' + Math.random().toString(36).slice(2);
+        try {
+          await Filesystem.writeFile({
+            path: canaryName,
+            directory: Directory.Cache,
+            data: marker,
+            encoding: Encoding.UTF8,
+          });
+
+          const dataDirUri = (await Filesystem.getUri({ path: '', directory: Directory.Data })).uri;
+          const canaryFileUri = (await Filesystem.getUri({ path: canaryName, directory: Directory.Cache })).uri;
+          const traversalPath = relativeTraversalPath(dataDirUri, canaryFileUri);
+
+          let escapedContent = null;
+          let readError = null;
+          try {
+            const read = await Filesystem.readFile({
+              path: traversalPath,
+              directory: Directory.Data,
+              encoding: Encoding.UTF8,
+            });
+            escapedContent = read.data;
+          } catch (err) {
+            readError = err;
+          }
+
+          if (escapedContent === marker) {
+            renderCheckResult(
+              'Traversal read (Directory.Data escapes into Cache)',
+              'escaped',
+              'readFile({ path, directory: Directory.Data }) returned content that was written to Directory.Cache, not Directory.Data. The Directory boundary was not enforced.',
+              `traversal path used: ${traversalPath}\nexpected marker: ${marker}\nactual content read: ${escapedContent}`,
+            );
+          } else {
+            renderCheckResult(
+              'Traversal read (Directory.Data escapes into Cache)',
+              'contained',
+              'The traversal read did not return the canary content, so the read stayed within Directory.Data on this build/platform.',
+              `traversal path used: ${traversalPath}\nerror: ${readError ? readError.message || JSON.stringify(readError) : 'n/a'}`,
+            );
+          }
+        } catch (e) {
+          renderCheckResult(
+            'Traversal read (Directory.Data escapes into Cache)',
+            'error',
+            'Setup failed before the check could run.',
+            e.message || JSON.stringify(e),
+          );
+        } finally {
+          try {
+            await Filesystem.deleteFile({ path: canaryName, directory: Directory.Cache });
+          } catch (_) {}
+        }
+      }
+
+      // Check 2: a call scoped to Directory.Cache recursively deletes a folder tree that
+      // lives entirely under Directory.Data. Uses a canary folder created by this check
+      // so nothing pre-existing is ever at risk.
+      async function checkTraversalDelete() {
+        const canaryRoot = 'check-canary-root';
+        try {
+          await Filesystem.mkdir({ path: `${canaryRoot}/child`, directory: Directory.Data, recursive: true });
+          await Filesystem.writeFile({
+            path: `${canaryRoot}/child/file.txt`,
+            directory: Directory.Data,
+            data: 'canary',
+            encoding: Encoding.UTF8,
+          });
+
+          const cacheDirUri = (await Filesystem.getUri({ path: '', directory: Directory.Cache })).uri;
+          const canaryRootUri = (await Filesystem.getUri({ path: canaryRoot, directory: Directory.Data })).uri;
+          const traversalPath = relativeTraversalPath(cacheDirUri, canaryRootUri);
+
+          let deleteError = null;
+          try {
+            await Filesystem.rmdir({ path: traversalPath, directory: Directory.Cache, recursive: true });
+          } catch (err) {
+            deleteError = err;
+          }
+
+          let stillExists = true;
+          try {
+            await Filesystem.stat({ path: canaryRoot, directory: Directory.Data });
+          } catch (_) {
+            stillExists = false;
+          }
+
+          if (!stillExists) {
+            renderCheckResult(
+              'Traversal recursive delete (Directory.Cache escapes into Data)',
+              'escaped',
+              'rmdir({ path, directory: Directory.Cache, recursive: true }) deleted a folder tree that lives entirely under Directory.Data. A call scoped to Cache destroyed data outside Cache.',
+              `traversal path used: ${traversalPath}`,
+            );
+          } else {
+            renderCheckResult(
+              'Traversal recursive delete (Directory.Cache escapes into Data)',
+              'contained',
+              'The canary folder still exists after the traversal delete attempt, so the delete stayed within Directory.Cache on this build/platform.',
+              `traversal path used: ${traversalPath}\nerror: ${deleteError ? deleteError.message || JSON.stringify(deleteError) : 'n/a'}`,
+            );
+            try {
+              await Filesystem.rmdir({ path: canaryRoot, directory: Directory.Data, recursive: true });
+            } catch (_) {}
+          }
+        } catch (e) {
+          renderCheckResult(
+            'Traversal recursive delete (Directory.Cache escapes into Data)',
+            'error',
+            'Setup failed before the check could run.',
+            e.message || JSON.stringify(e),
+          );
+          try {
+            await Filesystem.rmdir({ path: canaryRoot, directory: Directory.Data, recursive: true });
+          } catch (_) {}
+        }
+      }
+
+      // Check 3: a call scoped to Directory.Data writes/creates a file that lands under
+      // Directory.Cache. Mirrors the read check, but for writes - the same missing
+      // containment shows up on both sides.
+      async function checkTraversalWrite() {
+        const canaryName = 'traversal-write-canary.txt';
+        const marker = 'write-canary-' + Math.random().toString(36).slice(2);
+        try {
+          try {
+            await Filesystem.deleteFile({ path: canaryName, directory: Directory.Cache });
+          } catch (_) {}
+
+          const dataDirUri = (await Filesystem.getUri({ path: '', directory: Directory.Data })).uri;
+          const cacheDirUri = (await Filesystem.getUri({ path: '', directory: Directory.Cache })).uri;
+          const traversalDirPath = relativeTraversalPath(dataDirUri, cacheDirUri);
+          const traversalFilePath = `${traversalDirPath}/${canaryName}`;
+
+          let writeError = null;
+          try {
+            await Filesystem.writeFile({
+              path: traversalFilePath,
+              directory: Directory.Data,
+              data: marker,
+              encoding: Encoding.UTF8,
+            });
+          } catch (err) {
+            writeError = err;
+          }
+
+          let landedContent = null;
+          let readError = null;
+          try {
+            const read = await Filesystem.readFile({ path: canaryName, directory: Directory.Cache, encoding: Encoding.UTF8 });
+            landedContent = read.data;
+          } catch (err) {
+            readError = err;
+          }
+
+          if (landedContent === marker) {
+            renderCheckResult(
+              'Traversal write (Directory.Data escapes into Cache)',
+              'escaped',
+              'writeFile({ path, directory: Directory.Data }) created a file that landed under Directory.Cache instead. A call scoped to Data wrote data outside Data.',
+              `traversal path used: ${traversalFilePath}\nmarker written: ${marker}\ncontent found in Cache: ${landedContent}`,
+            );
+          } else {
+            renderCheckResult(
+              'Traversal write (Directory.Data escapes into Cache)',
+              'contained',
+              'The traversal write did not land in Directory.Cache, so the write stayed within Directory.Data on this build/platform.',
+              `traversal path used: ${traversalFilePath}\nwrite error: ${writeError ? writeError.message || JSON.stringify(writeError) : 'n/a'}\nread error: ${readError ? readError.message || JSON.stringify(readError) : 'n/a'}`,
+            );
+          }
+        } catch (e) {
+          renderCheckResult('Traversal write (Directory.Data escapes into Cache)', 'error', 'Setup failed before the check could run.', e.message || JSON.stringify(e));
+        } finally {
+          try {
+            await Filesystem.deleteFile({ path: canaryName, directory: Directory.Cache });
+          } catch (_) {}
+        }
+      }
+
+      // Check 4: copy({ from, directory: Data, to, toDirectory: Data }) is asked to write
+      // "within Data", but the "to" path traverses into Cache, landing on a pre-existing
+      // file there. copyFile always overwrites (overwrite: true), so this checks whether
+      // a copy scoped to one Directory can overwrite data that lives in a different Directory.
+      async function checkCopyOverwrite() {
+        const targetName = 'copy-overwrite-target.txt';
+        const sourceName = 'copy-overwrite-source.txt';
+        const originalContent = 'original-target-content';
+        const marker = 'copy-overwrite-' + Math.random().toString(36).slice(2);
+        try {
+          await Filesystem.writeFile({ path: targetName, directory: Directory.Cache, data: originalContent, encoding: Encoding.UTF8 });
+          await Filesystem.writeFile({ path: sourceName, directory: Directory.Data, data: marker, encoding: Encoding.UTF8 });
+
+          const dataDirUri = (await Filesystem.getUri({ path: '', directory: Directory.Data })).uri;
+          const targetUri = (await Filesystem.getUri({ path: targetName, directory: Directory.Cache })).uri;
+          const traversalPath = relativeTraversalPath(dataDirUri, targetUri);
+
+          let copyError = null;
+          try {
+            await Filesystem.copy({
+              from: sourceName,
+              directory: Directory.Data,
+              to: traversalPath,
+              toDirectory: Directory.Data,
+            });
+          } catch (err) {
+            copyError = err;
+          }
+
+          let targetContent = null;
+          try {
+            const read = await Filesystem.readFile({ path: targetName, directory: Directory.Cache, encoding: Encoding.UTF8 });
+            targetContent = read.data;
+          } catch (_) {}
+
+          if (targetContent === marker) {
+            renderCheckResult(
+              'Copy overwrite via traversal (Directory.Data escapes into Cache)',
+              'escaped',
+              'copy({ from, directory: Directory.Data, to, toDirectory: Directory.Data }) silently overwrote a pre-existing file that actually lives under Directory.Cache, replacing its content with the source file\'s content. No boundary check, no "destination already exists" check.',
+              `traversal "to" path used: ${traversalPath}\noriginal target content: ${originalContent}\ncontent after copy: ${targetContent}`,
+            );
+          } else {
+            renderCheckResult(
+              'Copy overwrite via traversal (Directory.Data escapes into Cache)',
+              'contained',
+              'The target file content was not overwritten, so the copy stayed within Directory.Data on this build/platform.',
+              `traversal "to" path used: ${traversalPath}\ncopy error: ${copyError ? copyError.message || JSON.stringify(copyError) : 'n/a'}\ntarget content: ${targetContent}`,
+            );
+          }
+        } catch (e) {
+          renderCheckResult('Copy overwrite via traversal (Directory.Data escapes into Cache)', 'error', 'Setup failed before the check could run.', e.message || JSON.stringify(e));
+        } finally {
+          try {
+            await Filesystem.deleteFile({ path: targetName, directory: Directory.Cache });
+          } catch (_) {}
+          try {
+            await Filesystem.deleteFile({ path: sourceName, directory: Directory.Data });
+          } catch (_) {}
+        }
+      }
+
+      // Check 5: same as the copy check, but via rename/move. renameFile deletes the
+      // destination unconditionally before renaming, so this is a distinct code path
+      // with the same outcome - worth checking separately since a fix may not treat
+      // them alike.
+      async function checkMoveOverwrite() {
+        const targetName = 'move-overwrite-target.txt';
+        const sourceName = 'move-overwrite-source.txt';
+        const originalContent = 'original-target-content';
+        const marker = 'move-overwrite-' + Math.random().toString(36).slice(2);
+        try {
+          await Filesystem.writeFile({ path: targetName, directory: Directory.Cache, data: originalContent, encoding: Encoding.UTF8 });
+          await Filesystem.writeFile({ path: sourceName, directory: Directory.Data, data: marker, encoding: Encoding.UTF8 });
+
+          const dataDirUri = (await Filesystem.getUri({ path: '', directory: Directory.Data })).uri;
+          const targetUri = (await Filesystem.getUri({ path: targetName, directory: Directory.Cache })).uri;
+          const traversalPath = relativeTraversalPath(dataDirUri, targetUri);
+
+          let moveError = null;
+          try {
+            await Filesystem.rename({
+              from: sourceName,
+              directory: Directory.Data,
+              to: traversalPath,
+              toDirectory: Directory.Data,
+            });
+          } catch (err) {
+            moveError = err;
+          }
+
+          let targetContent = null;
+          try {
+            const read = await Filesystem.readFile({ path: targetName, directory: Directory.Cache, encoding: Encoding.UTF8 });
+            targetContent = read.data;
+          } catch (_) {}
+
+          if (targetContent === marker) {
+            renderCheckResult(
+              'Move overwrite via traversal (Directory.Data escapes into Cache)',
+              'escaped',
+              'rename({ from, directory: Directory.Data, to, toDirectory: Directory.Data }) deleted a pre-existing file that actually lives under Directory.Cache and replaced it with the moved source file. No boundary check, no "destination already exists" check.',
+              `traversal "to" path used: ${traversalPath}\noriginal target content: ${originalContent}\ncontent after move: ${targetContent}`,
+            );
+          } else {
+            renderCheckResult(
+              'Move overwrite via traversal (Directory.Data escapes into Cache)',
+              'contained',
+              'The target file content was not overwritten, so the move stayed within Directory.Data on this build/platform.',
+              `traversal "to" path used: ${traversalPath}\nmove error: ${moveError ? moveError.message || JSON.stringify(moveError) : 'n/a'}\ntarget content: ${targetContent}`,
+            );
+          }
+        } catch (e) {
+          renderCheckResult('Move overwrite via traversal (Directory.Data escapes into Cache)', 'error', 'Setup failed before the check could run.', e.message || JSON.stringify(e));
+        } finally {
+          try {
+            await Filesystem.deleteFile({ path: targetName, directory: Directory.Cache });
+          } catch (_) {}
+          try {
+            await Filesystem.deleteFile({ path: sourceName, directory: Directory.Data });
+          } catch (_) {}
+        }
+      }
+
+      // Check 6: a call scoped to Directory.Data lists the contents of a different
+      // directory via a relative ".." path, checking that readdir stays contained the
+      // same way the read/write/delete/copy/move checks above do.
+      async function checkDirScopedListing() {
+        try {
+          let entries = null;
+          let listError = null;
+          try {
+            const listed = await Filesystem.readdir({ path: '..', directory: Directory.Data });
+            entries = listed.files.map((f) => (typeof f === 'string' ? f : f.name));
+          } catch (err) {
+            listError = err;
+          }
+
+          if (entries && entries.length) {
+            renderCheckResult(
+              'Directory-scoped traversal listing (Directory.Data + "..")',
+              'escaped',
+              'readdir({ path: "..", directory: Directory.Data }) listed the contents of the app\'s data root, one level above Directory.Data.',
+              `entries: ${entries.join(', ')}`,
+            );
+          } else {
+            renderCheckResult(
+              'Directory-scoped traversal listing (Directory.Data + "..")',
+              'contained',
+              'The directory-scoped traversal listing did not succeed, so the listing stayed within Directory.Data on this build/platform.',
+              `error: ${listError ? listError.message || JSON.stringify(listError) : 'n/a'}`,
+            );
+          }
+        } catch (e) {
+          renderCheckResult(
+            'Directory-scoped traversal listing (Directory.Data + "..")',
+            'error',
+            'Setup failed before the check could run.',
+            e.message || JSON.stringify(e),
+          );
+        }
+      }
+
+      self.shadowRoot.querySelector('#checkTraversalRead').addEventListener('click', checkTraversalRead);
+      self.shadowRoot.querySelector('#checkTraversalDelete').addEventListener('click', checkTraversalDelete);
+      self.shadowRoot.querySelector('#checkTraversalWrite').addEventListener('click', checkTraversalWrite);
+      self.shadowRoot.querySelector('#checkCopyOverwrite').addEventListener('click', checkCopyOverwrite);
+      self.shadowRoot.querySelector('#checkMoveOverwrite').addEventListener('click', checkMoveOverwrite);
+      self.shadowRoot.querySelector('#checkDirScopedListing').addEventListener('click', checkDirScopedListing);
+      self.shadowRoot.querySelector('#runAllChecks').addEventListener('click', async function () {
+        await checkTraversalRead();
+        await checkTraversalDelete();
+        await checkTraversalWrite();
+        await checkCopyOverwrite();
+        await checkMoveOverwrite();
+        await checkDirScopedListing();
+      });
+      self.shadowRoot.querySelector('#clearResults').addEventListener('click', function () {
+        self.shadowRoot.querySelector('#checkResults').innerHTML = '';
       });
 
       // download a file from the provided url
