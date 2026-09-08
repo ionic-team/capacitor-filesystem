@@ -1,7 +1,6 @@
 package com.capacitorjs.plugins.filesystem
 
 import android.content.Context
-import android.net.Uri
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -17,6 +16,7 @@ import java.io.IOException
 import java.net.URISyntaxException
 import java.net.URL
 import kotlin.concurrent.thread
+import androidx.core.net.toUri
 
 class LegacyFilesystemImplementation internal constructor(private val context: Context) {
     fun downloadFile(
@@ -61,9 +61,9 @@ class LegacyFilesystemImplementation internal constructor(private val context: C
 
     private fun getFileObject(path: String, directory: String?): File? {
         if (directory == null) {
-            val u = Uri.parse(path)
+            val u = path.toUri()
             if (u.scheme == null || u.scheme == "file") {
-                return File(u.path)
+                return File(u.path ?: "")
             }
         }
 
@@ -125,7 +125,7 @@ class LegacyFilesystemImplementation internal constructor(private val context: C
 
         try {
             maxBytes = contentLength?.toInt() ?: 0
-        } catch (ignored: NumberFormatException) {
+        } catch (_: NumberFormatException) {
         }
 
         val buffer = ByteArray(1024)
@@ -140,7 +140,7 @@ class LegacyFilesystemImplementation internal constructor(private val context: C
 
             bytes += len
 
-            if (progress!! && null != emitter) {
+            if (progress && null != emitter) {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - lastEmitTime > minEmitIntervalMillis) {
                     emitter.emit(bytes, maxBytes)
@@ -149,7 +149,7 @@ class LegacyFilesystemImplementation internal constructor(private val context: C
             }
         }
 
-        if (progress!! && null != emitter) {
+        if (progress && null != emitter) {
             emitter.emit(bytes, maxBytes)
         }
 
