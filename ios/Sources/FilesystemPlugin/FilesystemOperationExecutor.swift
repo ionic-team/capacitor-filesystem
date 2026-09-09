@@ -35,7 +35,19 @@ class FilesystemOperationExecutor {
                 try service.removeDirectory(atURL: url, includeIntermediateDirectories: recursive)
             case .readdir(let url):
                 let directoryAttributes = try service.listDirectory(atURL: url)
-                    .map { try fetchItemAttributesJSObject(using: service, atURL: $0) }
+                    .map { childUrl in
+                        (url: childUrl, attributes: try service.getItemAttributes(atURL: childUrl))
+                    }
+                    .sorted { lhs, rhs in
+                        if lhs.attributes.modificationDateTimestamp != rhs.attributes.modificationDateTimestamp {
+                            return lhs.attributes.modificationDateTimestamp < rhs.attributes.modificationDateTimestamp
+                        }
+                        if lhs.attributes.creationDateTimestamp != rhs.attributes.creationDateTimestamp {
+                            return lhs.attributes.creationDateTimestamp < rhs.attributes.creationDateTimestamp
+                        }
+                        return lhs.url.lastPathComponent.localizedCaseInsensitiveCompare(rhs.url.lastPathComponent) == .orderedAscending
+                    }
+                    .map { $0.attributes.toJSResult(with: $0.url) }
                 resultData = [Constants.ResultDataKey.files: directoryAttributes]
             case .stat(let url):
                 resultData = try fetchItemAttributesJSObject(using: service, atURL: url)
