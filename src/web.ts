@@ -486,7 +486,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
         path: to,
         directory: toDirectory,
       });
-    } catch (e) {
+    } catch {
       // To location does not exist, ensure the directory containing "to" location exists and is a directory
       const toPathComponents = to.split('/');
       toPathComponents.pop();
@@ -582,7 +582,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
           if (doRename) {
             await updateTime(to, ctime, fromObj.mtime);
           }
-        } catch (e) {
+        } catch {
           // ignore
         }
 
@@ -686,7 +686,7 @@ export class FilesystemWeb extends WebPlugin implements FilesystemPlugin {
   private isBase64String(str: string): boolean {
     try {
       return btoa(atob(str)) == str;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
