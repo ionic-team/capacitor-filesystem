@@ -10,14 +10,14 @@ let package = Package(
             targets: ["FilesystemPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "9.0.0-alpha.5"),
+        .package(url: "https://github.com/ionic-team/capacitor.git", from: "9.0.0-alpha.7"),
         .package(url: "https://github.com/ionic-team/ion-ios-filesystem.git", from: "1.1.1")
     ],
     targets: [
         .target(
             name: "FilesystemPlugin",
             dependencies: [
-                .product(name: "Capacitor", package: "capacitor-swift-pm"),
+                .product(name: "Capacitor", package: "capacitor"),
                 .product(name: "IONFilesystemLib", package: "ion-ios-filesystem")
             ],
             path: "ios/Sources/FilesystemPlugin"),
