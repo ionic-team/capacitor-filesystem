@@ -332,8 +332,13 @@ class FilesystemPlugin : Plugin() {
             "readdir" -> readdir(call)
             "getUri" -> getUri(call)
             "stat" -> stat(call)
-            "downloadFile" -> downloadFile(call)
+            "downloadFile" -> callDeprecatedDownloadFile(call)
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun callDeprecatedDownloadFile(call: PluginCall) {
+        downloadFile(call)
     }
 
     /**
