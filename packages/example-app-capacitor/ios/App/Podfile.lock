@@ -4,12 +4,12 @@ PODS:
   - CapacitorCamera (7.0.0):
     - Capacitor
   - CapacitorCordova (7.0.0)
-  - CapacitorFilesystem (7.1.4):
+  - CapacitorFilesystem (7.1.8):
     - Capacitor
-    - IONFilesystemLib (~> 1.0.1)
+    - IONFilesystemLib (~> 1.1.4)
   - CapacitorSplashScreen (7.0.0):
     - Capacitor
-  - IONFilesystemLib (1.0.1)
+  - IONFilesystemLib (1.1.4)
 
 DEPENDENCIES:
   - "Capacitor (from `../../../../node_modules/.pnpm/@capacitor+ios@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/ios`)"
@@ -35,12 +35,12 @@ EXTERNAL SOURCES:
     :path: "../../../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0_@capacitor+core@7.0.0/node_modules/@capacitor/splash-screen"
 
 SPEC CHECKSUMS:
-  Capacitor: fcbee427ff437f414bbb3bc2d39364ad9bd2b8a5
-  CapacitorCamera: 777ddf61d727754fcda0b92303ae09ea3765d7b7
+  Capacitor: 82d1f3b4480d66b5996814f74500dcbc0908558c
+  CapacitorCamera: 20a37684b81c69c0c33fb5a7216919f135371a6f
   CapacitorCordova: 345f93b7edd121db98e4ec20ac94d6d7bcaf7e48
-  CapacitorFilesystem: ac0a386949ed6c295a3dffa129ecd26b881ae5be
-  CapacitorSplashScreen: f4e58cc02aafd91c7cbaf32a3d1b44d02a115125
-  IONFilesystemLib: 89258b8e3e85465da93127d25d7ce37f977e8a6f
+  CapacitorFilesystem: 4f0f500f8247e6bdea5e71353308a8cb738b4eae
+  CapacitorSplashScreen: 7e7a0a1113833032f196b3af6fa437baccacf5bc
+  IONFilesystemLib: e6610c2b260d15e4b9cb9d5e37a87095479b669e
 
 PODFILE CHECKSUM: 57ff2f3f788c053bccb9ff1b6e7abe4817322e3f
 
