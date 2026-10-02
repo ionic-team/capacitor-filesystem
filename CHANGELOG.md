@@ -1,3 +1,12 @@
+## [8.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.3...v8.1.4) (2026-10-02)
+
+
+### Bug Fixes
+
+* contain Directory-scoped paths to their target directory ([#91](https://github.com/ionic-team/capacitor-filesystem/issues/91)) ([40394b7](https://github.com/ionic-team/capacitor-filesystem/commit/40394b7ba1af45d2abcb048254743b917ede3f0f))
+* **ios:** raw file paths without a scheme couldn't be accessed ([#84](https://github.com/ionic-team/capacitor-filesystem/issues/84)) ([74495f5](https://github.com/ionic-team/capacitor-filesystem/commit/74495f5177e8f3f2aa477058708af69dea0c0a09))
+* **ios:** update native lib to latest version ([#93](https://github.com/ionic-team/capacitor-filesystem/issues/93)) ([cb9f6ff](https://github.com/ionic-team/capacitor-filesystem/commit/cb9f6ff16533d81abf23f0a575379fb5bfea9785))
+
 ## [8.1.3](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.2...v8.1.3) (2026-08-19)
 
 
