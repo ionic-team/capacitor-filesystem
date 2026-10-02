@@ -1,3 +1,10 @@
+## [7.1.9](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.8...v7.1.9) (2026-10-02)
+
+
+### Bug Fixes
+
+* contain Directory-scoped paths to their target directory  ([#92](https://github.com/ionic-team/capacitor-filesystem/issues/92)) ([1187973](https://github.com/ionic-team/capacitor-filesystem/commit/1187973e1f5732477697141e868a629a8272623d))
+
 ## [7.1.8](https://github.com/ionic-team/capacitor-filesystem/compare/v7.1.7...v7.1.8) (2026-02-16)
 
 
