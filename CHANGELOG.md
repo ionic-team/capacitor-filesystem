@@ -1,3 +1,10 @@
+## [8.1.5](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.4...v8.1.5) (2026-10-15)
+
+
+### Bug Fixes
+
+* **ios:** writeFile/stat in Directory.Temporary failing with OS-PLUG-FILE-0006 ([#94](https://github.com/ionic-team/capacitor-filesystem/issues/94)) ([71aaad1](https://github.com/ionic-team/capacitor-filesystem/commit/71aaad1e2b8353b2565e015a97c86b20fbb67c25)), closes [#90](https://github.com/ionic-team/capacitor-filesystem/issues/90)
+
 ## [8.1.4](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.3...v8.1.4) (2026-10-02)
 
 
