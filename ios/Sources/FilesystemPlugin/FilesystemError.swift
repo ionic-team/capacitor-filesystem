@@ -16,7 +16,7 @@ enum IONFileMethod: String {
 enum FilesystemError: Error {
     case bridgeNotInitialised
     case invalidInput(method: IONFileMethod)
-    case invalidPath(_ path: String)
+    case invalidPath(_ path: String, reason: Error? = nil)
     case fileNotFound(method: IONFileMethod, _ path: String)
     case directoryAlreadyExists(_ path: String)
     case parentDirectoryMissing
@@ -46,7 +46,7 @@ private extension FilesystemError {
         switch self {
         case .bridgeNotInitialised: "Capacitor bridge isn't initialized."
         case .invalidInput(let method): "The '\(method.rawValue)' input parameters aren't valid."
-        case .invalidPath(let path): "Invalid \(!path.isEmpty ? "'" + path + "' " : "")path."
+        case .invalidPath(let path, let reason): "Invalid \(!path.isEmpty ? "'" + path + "' " : "")path\(reason.map { ": \($0.localizedDescription)" } ?? ".")"
         case .fileNotFound(let method, let path): "'\(method.rawValue)' failed because file\(!path.isEmpty ? " at '" + path + "' " : "") does not exist."
         case .directoryAlreadyExists(let path): "Directory\(!path.isEmpty ? " at '" + path + "' " : "") already exists, cannot be overwritten."
         case .parentDirectoryMissing: "Missing parent directory - possibly recursive=false was passed or parent directory creation failed."
