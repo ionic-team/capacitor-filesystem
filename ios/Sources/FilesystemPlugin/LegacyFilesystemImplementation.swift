@@ -74,7 +74,6 @@ import Capacitor
 
         let headers = (call.getObject("headers") ?? [:]) as [String: Any]
         let params = (call.getObject("params") ?? [:]) as [String: Any]
-        let responseType = call.getString("responseType", "text")
         let connectTimeout = call.getDouble("connectTimeout")
         let readTimeout = call.getDouble("readTimeout")
 
