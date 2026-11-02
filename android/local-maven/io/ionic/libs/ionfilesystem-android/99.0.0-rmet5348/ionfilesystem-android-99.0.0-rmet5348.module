@@ -1,0 +1,104 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.ionic.libs",
+    "module": "ionfilesystem-android",
+    "version": "99.0.0-rmet5348",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.25"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ionfilesystem-android-99.0.0-rmet5348.aar",
+          "url": "ionfilesystem-android-99.0.0-rmet5348.aar",
+          "size": 171858,
+          "sha512": "8210b11f6debfb052ba181ba46adaa4e85de314e98780f19b373ecb07ee58a30c1580f2292bbe84658be0fa9c85d61171508755449048e2a7c7f0c2865bf4138",
+          "sha256": "90c438f66e41932ee0dc9ca48a1b03a3739587a83218729c2df3cce226e0952c",
+          "sha1": "a8811adfa3727c26bbcf68f05a05d286778f52e4",
+          "md5": "d2a59e6801c4ed9764a125fd59f7b4b7"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.core",
+          "module": "core-ktx",
+          "version": {
+            "requires": "1.16.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.9.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-android",
+          "version": {
+            "requires": "1.9.0"
+          }
+        },
+        {
+          "group": "androidx.activity",
+          "module": "activity-ktx",
+          "version": {
+            "requires": "1.10.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.25"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ionfilesystem-android-99.0.0-rmet5348.aar",
+          "url": "ionfilesystem-android-99.0.0-rmet5348.aar",
+          "size": 171858,
+          "sha512": "8210b11f6debfb052ba181ba46adaa4e85de314e98780f19b373ecb07ee58a30c1580f2292bbe84658be0fa9c85d61171508755449048e2a7c7f0c2865bf4138",
+          "sha256": "90c438f66e41932ee0dc9ca48a1b03a3739587a83218729c2df3cce226e0952c",
+          "sha1": "a8811adfa3727c26bbcf68f05a05d286778f52e4",
+          "md5": "d2a59e6801c4ed9764a125fd59f7b4b7"
+        }
+      ]
+    }
+  ]
+}
