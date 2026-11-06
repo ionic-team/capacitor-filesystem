@@ -1,3 +1,10 @@
+# [8.2.0-next.8](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.7...v8.2.0-next.8) (2026-11-06)
+
+
+### Bug Fixes
+
+* native android publishing compatibility with Gradle 9 / AGP 9 ([#99](https://github.com/ionic-team/capacitor-filesystem/issues/99)) ([b5b85ec](https://github.com/ionic-team/capacitor-filesystem/commit/b5b85ec41556a94f926868aa37ed1539260f0552))
+
 # [8.2.0-next.7](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.6...v8.2.0-next.7) (2026-10-27)
 
 # [8.2.0-next.6](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.5...v8.2.0-next.6) (2026-10-23)
