@@ -1,3 +1,5 @@
+# [8.2.0-next.9](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.8...v8.2.0-next.9) (2026-11-09)
+
 # [8.2.0-next.8](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.7...v8.2.0-next.8) (2026-11-06)
 
 
