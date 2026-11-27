@@ -1,3 +1,10 @@
+## [8.1.6](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.5...v8.1.6) (2026-11-27)
+
+
+### Bug Fixes
+
+* **android:** bump ionfilesystem-android to 2.0.0 ([#104](https://github.com/ionic-team/capacitor-filesystem/issues/104)) ([c61cb97](https://github.com/ionic-team/capacitor-filesystem/commit/c61cb971dd200d3694e74eb3021aef76067e9b7b))
+
 ## [8.1.5](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.4...v8.1.5) (2026-10-15)
 
 
