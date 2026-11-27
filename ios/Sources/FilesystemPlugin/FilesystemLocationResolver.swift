@@ -30,10 +30,10 @@ struct FilesystemLocationResolver {
     }
 
     private func resolveURL(path: String, directory: IONFILESearchPath) -> Result<URL, FilesystemError> {
-        return if let url = try? service.getFileURL(atPath: path, withSearchPath: directory) {
-            .success(url)
-        } else {
-            .failure(.invalidPath(path))
+        do {
+            return .success(try service.getFileURL(atPath: path, withSearchPath: directory))
+        } catch {
+            return .failure(.invalidPath(path, reason: error))
         }
     }
 }

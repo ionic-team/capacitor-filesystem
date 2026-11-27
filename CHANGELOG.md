@@ -1,3 +1,10 @@
+## [8.1.6](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.5...v8.1.6) (2026-11-27)
+
+
+### Bug Fixes
+
+* **android:** bump ionfilesystem-android to 2.0.0 ([#104](https://github.com/ionic-team/capacitor-filesystem/issues/104)) ([c61cb97](https://github.com/ionic-team/capacitor-filesystem/commit/c61cb971dd200d3694e74eb3021aef76067e9b7b))
+
 # [8.2.0-next.9](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.8...v8.2.0-next.9) (2026-11-09)
 
 # [8.2.0-next.8](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.7...v8.2.0-next.8) (2026-11-06)
@@ -10,6 +17,13 @@
 # [8.2.0-next.7](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.6...v8.2.0-next.7) (2026-10-27)
 
 # [8.2.0-next.6](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.5...v8.2.0-next.6) (2026-10-23)
+
+## [8.1.5](https://github.com/ionic-team/capacitor-filesystem/compare/v8.1.4...v8.1.5) (2026-10-15)
+
+
+### Bug Fixes
+
+* **ios:** writeFile/stat in Directory.Temporary failing with OS-PLUG-FILE-0006 ([#94](https://github.com/ionic-team/capacitor-filesystem/issues/94)) ([71aaad1](https://github.com/ionic-team/capacitor-filesystem/commit/71aaad1e2b8353b2565e015a97c86b20fbb67c25)), closes [#90](https://github.com/ionic-team/capacitor-filesystem/issues/90)
 
 # [8.2.0-next.5](https://github.com/ionic-team/capacitor-filesystem/compare/v8.2.0-next.4...v8.2.0-next.5) (2026-10-07)
 
